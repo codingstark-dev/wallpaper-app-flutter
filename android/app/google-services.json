@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "310799929187",
+    "firebase_url": "https://wallpaper-277ec.firebaseio.com",
+    "project_id": "wallpaper-277ec",
+    "storage_bucket": "wallpaper-277ec.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:310799929187:android:8d891427f4ce2f15fa0d56",
+        "android_client_info": {
+          "package_name": "amoledwallpapers.foxywall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "310799929187-5hf3tba39p5362b6if97vafjjlfjsraf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGH8XzKsGprRg_ZWe1As6D2Heb9SusonQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "310799929187-5hf3tba39p5362b6if97vafjjlfjsraf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
