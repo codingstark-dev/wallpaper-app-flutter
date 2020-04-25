@@ -2,9 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
+import 'package:wallpaper/route/const_route.dart';
 import 'package:wallpaper/widget/category.dart';
 import 'package:wallpaper/widget/hometext.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
+import 'route/route.dart' as router;
 
 void main() {
   runApp(MaterialApp(
@@ -13,6 +15,8 @@ void main() {
         create: (context) => AmoledFirebase(),
       ),
     ], child: MainScreenPage()),
+    initialRoute: HomePage,
+    onGenerateRoute: router.generateRoute,
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -30,11 +34,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    FirebaseDatabase.instance
-        .reference()
-        .child("newwallpaper/hot")
-        .once()
-        .then((value) => Provider.of<AmoledFirebase>(context, listen: false)
+    FirebaseDatabase.instance.reference().child("newwallpaper/new").once().then(
+        (value) => Provider.of<AmoledFirebase>(context, listen: false)
             .addWallpaper(value.value));
     FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
@@ -42,7 +43,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
     firebaseInstance.setPersistenceEnabled(true);
     // firebaseInstance.setPersistenceCacheSizeBytes(1);
     var databaseRef =
-        FirebaseDatabase.instance.reference().child("newwallpaper/hot");
+        FirebaseDatabase.instance.reference().child("newwallpaper/new");
     databaseRef.keepSynced(true);
   }
 
@@ -82,17 +83,17 @@ class _MainScreenPageState extends State<MainScreenPage> {
       body: SafeArea(
         child: ListView(
           children: [
-            HomeText(
-              text: "Categories",
-            ),
-            Category(),
+            // HomeText(
+            //   text: "Categories",
+            // ),
+            // Category(),
             HomeText(
               text: "Trending",
             ),
             FutureBuilder<DataSnapshot>(
                 future: FirebaseDatabase.instance
                     .reference()
-                    .child("newwallpaper/hot")
+                    .child("newwallpaper/new")
                     .once(),
                 builder:
                     (BuildContext context, AsyncSnapshot<dynamic> snapshot) {

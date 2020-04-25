@@ -127,13 +127,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.14.12"
-  color:
-    dependency: transitive
-    description:
-      name: color
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.1"
   convert:
     dependency: transitive
     description:
@@ -176,13 +169,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.9"
-  draw:
-    dependency: "direct main"
-    description:
-      name: draw
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.9.1"
   firebase:
     dependency: transitive
     description:
@@ -310,13 +296,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.12"
-  ini:
-    dependency: transitive
-    description:
-      name: ini
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.0.1"
   io:
     dependency: transitive
     description:
@@ -394,13 +373,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1+2"
-  oauth2:
-    dependency: transitive
-    description:
-      name: oauth2
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.0"
   package_config:
     dependency: transitive
     description:

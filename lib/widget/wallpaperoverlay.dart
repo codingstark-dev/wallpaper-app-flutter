@@ -1,8 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
+import 'package:wallpaper/route/const_route.dart';
+import 'package:wallpaper/screen/wallpaperdetail.dart';
 
 class WallpaperList extends StatefulWidget {
   const WallpaperList({
@@ -20,6 +24,7 @@ class _WallpaperListState extends State<WallpaperList> {
   @override
   Widget build(BuildContext context) {
     AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: GridView.builder(
@@ -43,66 +48,124 @@ class _WallpaperListState extends State<WallpaperList> {
               onTap: () {
                 // crud("newwallpaper/", Delete(index));
                 // amoledFirebase..removeList(index);
-                amoledFirebase.removeList(index);
-                setState(() {});
+                // amoledFirebase.removeList(index);
+                Navigator.push(
+                    context,
+                    CupertinoPageRoute(
+                        builder: (BuildContext context) => WallpaperDetail(
+                              data: amoledFirebase.wallpaper.preview[index],
+                              index: index,
+                            )));
                 print(index);
               },
-              child: ClipRRect(
-                  borderRadius: BorderRadius.all(Radius.circular(10)),
-                  child: Stack(
-                    alignment: Alignment.bottomCenter,
-                    children: [
-                      Container(
-                          color: Colors.white,
-                          height: 400,
-                          width: 250,
-                          child: Image.network(
-                            amoledFirebase.wallpaper.preview[index],
-                            fit: BoxFit.cover,
-                            filterQuality: FilterQuality.low,
-                            errorBuilder: (context, error, stackTrace) {
-                              changedmethod(amoledFirebase, index);
-                              return Center(
-                                  child: Text("😞 Sorry Author Removed Image"));
-                            },
-                            loadingBuilder: (context, child, loadingProgress) {
-                              if (loadingProgress == null) return child;
+              child: Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(10)),
+                        child: Stack(
+                          fit: StackFit.loose,
+                          alignment: Alignment.bottomCenter,
+                          children: [
+                            Container(
+                                color: Colors.white,
+                                height: 400,
+                                width: 250,
+                                child: Image.network(
+                                  amoledFirebase.wallpaper.preview[index],
+                                  fit: BoxFit.cover,
+                                  filterQuality: FilterQuality.low,
+                                  errorBuilder: (context, error, stackTrace) {
+                                    amoledFirebase.removeList(index);
+                                    return Center(
+                                        child: Text(
+                                            "😞 Sorry Author Removed Image"));
+                                  },
+                                  loadingBuilder:
+                                      (context, child, loadingProgress) {
+                                    if (loadingProgress == null) return child;
 
-                              return Center(
-                                child: CircularProgressIndicator(
-                                  backgroundColor: Color(0xff1e2134),
-                                  value: loadingProgress.expectedTotalBytes !=
-                                          null
-                                      ? loadingProgress.cumulativeBytesLoaded /
-                                          loadingProgress.expectedTotalBytes
-                                      : null,
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        backgroundColor: Color(0xff1e2134),
+                                        value: loadingProgress
+                                                    .expectedTotalBytes !=
+                                                null
+                                            ? loadingProgress
+                                                    .cumulativeBytesLoaded /
+                                                loadingProgress
+                                                    .expectedTotalBytes
+                                            : null,
+                                      ),
+                                    );
+                                  },
+                                )),
+                            Container(
+                              height: 30,
+                              width: 200,
+                              color: Color(0xffa9b7e2),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Container(
+                                        child: Text(
+                                          amoledFirebase.wallpaper.title[index]
+                                              .toString()
+                                              .dbFilterTitle,
+                                          style: TextStyle(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w400),
+                                          overflow: TextOverflow.clip,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            },
-                          )),
-                      Container(
-                        height: 30,
-                        width: 200,
-                        color: Colors.grey[50],
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Center(
-                              child: Text(amoledFirebase.wallpaper.title[index]
-                                  .toString()
-                                  .dbFilterTitle)),
-                        ),
-                      )
-                    ],
-                  )),
+                              ),
+                            ),
+                            // Positioned(
+                            //   bottom: 220,
+                            //   width: 210,
+                            //   child: Container(
+                            //     margin: EdgeInsets.all(15),
+                            //     padding: EdgeInsets.all(3),
+                            //     decoration: BoxDecoration(
+                            //         borderRadius: BorderRadius.circular(10),
+                            //         color: Color(0xffa9b7e2)),
+                            //     child: Text(
+                            //       "By ${amoledFirebase.wallpaper.author[index]}",
+                            //       textAlign: TextAlign.center,
+                            //       style: TextStyle(
+                            //         color: Colors.black,
+                            //         fontWeight: FontWeight.w400,
+                            //       ),
+                            //     ),
+                            //   ),
+                            // ),
+                          ],
+                        )),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "data",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Color(0xffa9b7e2)),
+                    overflow: TextOverflow.clip,
+                  )
+                ],
+              ),
             ),
           );
         },
       ),
     );
-  }
-
-  void changedmethod(a, i) {
-    a.removeList(i);
   }
 }
 
