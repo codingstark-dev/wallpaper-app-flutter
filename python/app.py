@@ -32,6 +32,8 @@ def redditdatas():
                 permalink = submission.permalink
                 preview = str(submission.preview['images'][0]['resolutions'][2]['url']).replace(
                     "amp", "")
+                wallpaperpreview = str(submission.preview['images'][0]['resolutions'][3]['url']).replace(
+                    "amp", "")
                 listfile.append({
                     "image": url,
                     "title": filename,
@@ -39,10 +41,11 @@ def redditdatas():
                     "ups": ups,
                     "created_utc": created_utc,
                     "permalink": permalink,
-                    "preview": preview
+                    "preview": preview,
+                    "wallpaper": wallpaperpreview
                 })
-                if "blue" in filename:
-                    print(filename)
+                # if "blue" in filename:
+                #     print(filename)
                 time.sleep(1)
 
 

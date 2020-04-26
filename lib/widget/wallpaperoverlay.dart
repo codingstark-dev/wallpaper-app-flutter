@@ -1,12 +1,13 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
-import 'package:wallpaper/route/const_route.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class WallpaperList extends StatefulWidget {
   const WallpaperList({
@@ -32,7 +33,7 @@ class _WallpaperListState extends State<WallpaperList> {
         shrinkWrap: true,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
-            childAspectRatio: 1 / 1.5,
+            childAspectRatio: 1 / 1.7,
             crossAxisSpacing: 2,
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
@@ -42,6 +43,12 @@ class _WallpaperListState extends State<WallpaperList> {
         ,
         // itemCount: data.wallpaper.url.length,
         itemBuilder: (BuildContext context, int index) {
+          var date = new DateTime.fromMillisecondsSinceEpoch(double.parse(
+                      amoledFirebase.wallpaper.createdUtc[index].toString())
+                  .floor() *
+              1000);
+// num2 = 10.12
+
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: InkWell(
@@ -53,10 +60,10 @@ class _WallpaperListState extends State<WallpaperList> {
                     context,
                     CupertinoPageRoute(
                         builder: (BuildContext context) => WallpaperDetail(
-                              data: amoledFirebase.wallpaper.preview[index],
+                              data: amoledFirebase.wallpaper.url[index],
                               index: index,
                             )));
-                print(index);
+                // print(index);
               },
               child: Column(
                 children: <Widget>[
@@ -84,42 +91,43 @@ class _WallpaperListState extends State<WallpaperList> {
                                   loadingBuilder:
                                       (context, child, loadingProgress) {
                                     if (loadingProgress == null) return child;
-
-                                    return Center(
-                                      child: CircularProgressIndicator(
-                                        backgroundColor: Color(0xff1e2134),
-                                        value: loadingProgress
-                                                    .expectedTotalBytes !=
-                                                null
-                                            ? loadingProgress
-                                                    .cumulativeBytesLoaded /
-                                                loadingProgress
-                                                    .expectedTotalBytes
-                                            : null,
-                                      ),
+                                    return SpinKitThreeBounce(
+                                      size: 14,
+                                      color: darkslategrayhs,
                                     );
+                                    // return Center(
+                                    //   child: CircularProgressIndicator(
+                                    //     backgroundColor: darkslategrayhs,
+                                    //     value: loadingProgress
+                                    //                 .expectedTotalBytes !=
+                                    //             null
+                                    //         ? loadingProgress
+                                    //                 .cumulativeBytesLoaded /
+                                    //             loadingProgress
+                                    //                 .expectedTotalBytes
+                                    //         : null,
+                                    //   ),
+                                    // );
                                   },
                                 )),
                             Container(
-                              height: 30,
+                              height: 33,
                               width: 200,
-                              color: Color(0xffa9b7e2),
+                              color: gainsborohs,
                               child: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Row(
                                   children: <Widget>[
                                     Expanded(
-                                      child: Container(
-                                        child: Text(
-                                          amoledFirebase.wallpaper.title[index]
-                                              .toString()
-                                              .dbFilterTitle,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400),
-                                          overflow: TextOverflow.clip,
-                                          textAlign: TextAlign.center,
-                                        ),
+                                      child: Text(
+                                        amoledFirebase.wallpaper.title[index]
+                                            .toString()
+                                            .dbFilterTitle,
+                                        style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400),
+                                        overflow: TextOverflow.clip,
+                                        textAlign: TextAlign.center,
                                       ),
                                     ),
                                   ],
@@ -134,7 +142,7 @@ class _WallpaperListState extends State<WallpaperList> {
                             //     padding: EdgeInsets.all(3),
                             //     decoration: BoxDecoration(
                             //         borderRadius: BorderRadius.circular(10),
-                            //         color: Color(0xffa9b7e2)),
+                            //         color: gainsborohs),
                             //     child: Text(
                             //       "By ${amoledFirebase.wallpaper.author[index]}",
                             //       textAlign: TextAlign.center,
@@ -151,14 +159,32 @@ class _WallpaperListState extends State<WallpaperList> {
                   SizedBox(
                     height: 10,
                   ),
-                  Text(
-                    "data",
-                    style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: Color(0xffa9b7e2)),
-                    overflow: TextOverflow.clip,
-                  )
+                  Column(
+                    children: <Widget>[
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          "By ${amoledFirebase.wallpaper.author[index]}",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: gainsborohs),
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.topLeft,
+                        child: Text(
+                          timeago.format(date),
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w400,
+                              color: gainsborohs),
+                          overflow: TextOverflow.clip,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

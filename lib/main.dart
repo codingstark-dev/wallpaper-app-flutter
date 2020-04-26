@@ -1,9 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/route/const_route.dart';
-import 'package:wallpaper/widget/category.dart';
 import 'package:wallpaper/widget/hometext.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
 import 'route/route.dart' as router;
@@ -32,7 +32,6 @@ class _MainScreenPageState extends State<MainScreenPage> {
   final ScrollController scrollController = ScrollController();
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     FirebaseDatabase.instance.reference().child("newwallpaper/new").once().then(
         (value) => Provider.of<AmoledFirebase>(context, listen: false)
@@ -52,11 +51,11 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // print(scrollController.offset / 2 / 12);
 
     return Scaffold(
-      backgroundColor: Color(0xff1e2134),
+      backgroundColor: darkslategrayhs,
       appBar: PreferredSize(
           child: AppBar(
             elevation: 0,
-            backgroundColor: Color(0xff1e2134),
+            backgroundColor: darkslategrayhs,
             centerTitle: false,
             automaticallyImplyLeading: false,
             actions: [

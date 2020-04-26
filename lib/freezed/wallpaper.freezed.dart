@@ -171,9 +171,33 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
     return _createdUtc;
   }
 
+  bool _didwallpaper = false;
+  List<dynamic> _wallpaper;
+
+  @override
+  List<dynamic> get wallpaper {
+    if (_didwallpaper == false) {
+      _didwallpaper = true;
+      _wallpaper = wallpaperData.map((e) => e['wallpaper']).toList();
+    }
+    return _wallpaper;
+  }
+
+  bool _didurl = false;
+  List<dynamic> _url;
+
+  @override
+  List<dynamic> get url {
+    if (_didurl == false) {
+      _didurl = true;
+      _url = wallpaperData.map((e) => e['image']).toList();
+    }
+    return _url;
+  }
+
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc)';
+    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, wallpaper: $wallpaper, url: $url)';
   }
 
   @override
@@ -188,7 +212,9 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
       ..add(DiagnosticsProperty('permalink', permalink))
       ..add(DiagnosticsProperty('image', image))
       ..add(DiagnosticsProperty('ups', ups))
-      ..add(DiagnosticsProperty('createdUtc', createdUtc));
+      ..add(DiagnosticsProperty('createdUtc', createdUtc))
+      ..add(DiagnosticsProperty('wallpaper', wallpaper))
+      ..add(DiagnosticsProperty('url', url));
   }
 
   @override

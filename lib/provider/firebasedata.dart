@@ -21,7 +21,6 @@ class AmoledFirebase with ChangeNotifier {
     firebasedb.removeAt(index);
     crud("newwallpaper/new", Addvalue(firebasedb));
     wallpaper = Wallpaper(firebasedb);
-    notifyListeners();
     return wallpaper;
   }
 }

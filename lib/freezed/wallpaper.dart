@@ -25,6 +25,11 @@ abstract class Wallpaper with _$Wallpaper {
   @late
   List<dynamic> get createdUtc =>
       wallpaperData.map((e) => e['created_utc']).toList();
+  @late
+  List<dynamic> get wallpaper =>
+      wallpaperData.map((e) => e['wallpaper']).toList();
+  @late
+  List<dynamic> get url => wallpaperData.map((e) => e['image']).toList();
 }
 
 // @freezed
@@ -41,7 +46,8 @@ abstract class Union with _$Union {
 
 void crud(
   String child,
-  Union crud,) {
+  Union crud,
+) {
   crud.maybeWhen(() => print("object"),
       add: (value) =>
           FirebaseDatabase.instance.reference().child("$child").set(value),
