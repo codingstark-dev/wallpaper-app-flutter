@@ -30,6 +30,15 @@ abstract class Wallpaper with _$Wallpaper {
       wallpaperData.map((e) => e['wallpaper']).toList();
   @late
   List<dynamic> get url => wallpaperData.map((e) => e['image']).toList();
+  @late
+  List<dynamic> get imagebytes =>
+      wallpaperData.map((e) => e['imagebytes']).toList();
+  @late
+  List<dynamic> get imagewidth =>
+      wallpaperData.map((e) => e['imagesize'][0]).toList();
+  @late
+  List<dynamic> get imageheight =>
+      wallpaperData.map((e) => e['imagesize'][1]).toList();
 }
 
 // @freezed
