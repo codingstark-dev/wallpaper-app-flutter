@@ -282,6 +282,13 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  fluttertoast:
+    dependency: "direct main"
+    description:
+      name: fluttertoast
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.1"
   font_awesome_flutter:
     dependency: "direct main"
     description:
@@ -465,7 +472,7 @@ packages:
     source: hosted
     version: "0.1.4"
   path_provider:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: path_provider
       url: "https://pub.dartlang.org"
@@ -492,6 +499,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.0+1"
+  permission_handler:
+    dependency: "direct main"
+    description:
+      name: permission_handler
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "5.0.0+hotfix.4"
+  permission_handler_platform_interface:
+    dependency: transitive
+    description:
+      name: permission_handler_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.0"
   petitparser:
     dependency: transitive
     description:
@@ -686,6 +707,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.8"
+  wallpaper_manager:
+    dependency: "direct main"
+    description:
+      name: wallpaper_manager
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.7"
   watcher:
     dependency: transitive
     description:

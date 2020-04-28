@@ -1,5 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
@@ -33,6 +35,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   @override
   void initState() {
     super.initState();
+    checkPermission();
     FirebaseDatabase.instance.reference().child("newwallpaper/new").once().then(
         (value) => Provider.of<AmoledFirebase>(context, listen: false)
             .addWallpaper(value.value));
@@ -44,6 +47,64 @@ class _MainScreenPageState extends State<MainScreenPage> {
     var databaseRef =
         FirebaseDatabase.instance.reference().child("newwallpaper/new");
     databaseRef.keepSynced(true);
+  }
+
+  Future checkPermission() async {
+    Permission status = Permission.storage;
+    if (await status.isUndetermined) {
+      Fluttertoast.showToast(
+          msg: "Please Allow Storage Permission For Set Wallpaper");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+      print("object");
+    } else if (await status.isDenied) {
+      Fluttertoast.showToast(
+          msg: "Please Allow Storage Permission For Set Wallpaper");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    } else if (await status.isPermanentlyDenied) {
+      Fluttertoast.showToast(
+          msg:
+              "Go to Setting app manager and allow storage permission to access wallpapers");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    } else if (await status.isRestricted) {
+      Fluttertoast.showToast(
+          msg:
+              "Go to Setting app manager and allow storage permission to access wallpapers");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    }else if (await status.isGranted) {
+      Fluttertoast.showToast(msg: "Welcome Back!",);
+    }
   }
 
   @override

@@ -64,8 +64,8 @@ class _WallpaperListState extends State<WallpaperList> {
                           CupertinoPageRoute(
                               builder: (BuildContext context) =>
                                   WallpaperDetail(
-                                    data: amoledFirebase.wallpaper.url[index],
-                                    index: index,
+                                    url: amoledFirebase.wallpaper.url[index],
+                                    index: index,title: amoledFirebase.wallpaper.title[index],
                                   )));
                       // print(index);
                     },

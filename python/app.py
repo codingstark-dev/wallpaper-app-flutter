@@ -11,7 +11,7 @@ reddit = praw.Reddit(client_id='W1XGqNQSKF2h4w',
                      client_secret='32CM4A9gSaIGVJFTwCHtKjWt7Xg', password='6b6WNmT*qZQ@qvx',
                      user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36', username='himanshu338')
 subreddit = reddit.subreddit('Amoledbackgrounds')
-hot_python = subreddit.new(limit=10)
+hot_python = subreddit.new(limit=50)
 
 firebase = firebase.FirebaseApplication(
     'https://wallpaper-277ec.firebaseio.com/', None)
@@ -34,8 +34,8 @@ def redditdatas():
                 permalink = submission.permalink
                 preview = str(submission.preview['images'][0]['resolutions'][2]['url']).replace(
                     "amp", "")
-                wallpaperpreview = str(submission.preview['images'][0]['resolutions'][3]['url']).replace(
-                    "amp", "")
+                # wallpaperpreview = str(submission.preview['images'][0]['resolutions'][3]['url']).replace(
+                #     "amp", "")
                 image_data = BytesIO(requests.get(url2).content)
 
                 image_obj = Image.open(image_data)
@@ -52,7 +52,7 @@ def redditdatas():
                     "created_utc": created_utc,
                     "permalink": permalink,
                     "preview": preview,
-                    "wallpaper": wallpaperpreview,
+                    # "wallpaper": wallpaperpreview,
                     "imagesize": imagesize, "imagebytes": imagebytes})
                 # if "blue" in filename:
                 #     print(filename)

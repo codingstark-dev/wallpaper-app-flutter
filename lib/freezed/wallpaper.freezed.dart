@@ -171,18 +171,6 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
     return _createdUtc;
   }
 
-  bool _didwallpaper = false;
-  List<dynamic> _wallpaper;
-
-  @override
-  List<dynamic> get wallpaper {
-    if (_didwallpaper == false) {
-      _didwallpaper = true;
-      _wallpaper = wallpaperData.map((e) => e['wallpaper']).toList();
-    }
-    return _wallpaper;
-  }
-
   bool _didurl = false;
   List<dynamic> _url;
 
@@ -233,7 +221,7 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, wallpaper: $wallpaper, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
   }
 
   @override
@@ -249,7 +237,6 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
       ..add(DiagnosticsProperty('image', image))
       ..add(DiagnosticsProperty('ups', ups))
       ..add(DiagnosticsProperty('createdUtc', createdUtc))
-      ..add(DiagnosticsProperty('wallpaper', wallpaper))
       ..add(DiagnosticsProperty('url', url))
       ..add(DiagnosticsProperty('imagebytes', imagebytes))
       ..add(DiagnosticsProperty('imagewidth', imagewidth))
