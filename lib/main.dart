@@ -6,11 +6,17 @@ import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/route/const_route.dart';
+import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper/widget/hometext.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
 import 'route/route.dart' as router;
 
 void main() {
+  try {
+    serviceLocator();
+  } catch (e) {
+    print(e.toString());
+  }
   runApp(MaterialApp(
     home: MultiProvider(providers: [
       ChangeNotifierProvider<AmoledFirebase>(
@@ -102,8 +108,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
           Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
         }
       });
-    }else if (await status.isGranted) {
-      Fluttertoast.showToast(msg: "Welcome Back!",);
+    } else if (await status.isGranted) {
+      Fluttertoast.showToast(
+        msg: "Welcome Back!",
+      );
     }
   }
 

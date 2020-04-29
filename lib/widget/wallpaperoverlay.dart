@@ -63,9 +63,14 @@ class _WallpaperListState extends State<WallpaperList> {
                           context,
                           CupertinoPageRoute(
                               builder: (BuildContext context) =>
-                                  WallpaperDetail(
-                                    url: amoledFirebase.wallpaper.url[index],
-                                    index: index,title: amoledFirebase.wallpaper.title[index],
+                                  ChangeNotifierProvider<AmoledFirebase>(
+                                    create: (context) => AmoledFirebase(),
+                                    child: WallpaperDetail(
+                                      url: amoledFirebase.wallpaper.url[index],
+                                      index: index,
+                                      title:
+                                          amoledFirebase.wallpaper.title[index],
+                                    ),
                                   )));
                       // print(index);
                     },
@@ -151,7 +156,8 @@ class _WallpaperListState extends State<WallpaperList> {
                                   child: Container(
                                       padding: EdgeInsets.all(3),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(5),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
                                           color: gainsborohs.withOpacity(0.6),
                                           border: Border.all(
                                               width: 1, color: gainsborohs)),
@@ -163,8 +169,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                           style: TextStyle(
                                               fontSize: 9,
                                               fontWeight: FontWeight.bold,
-                                              color:
-                                                  Colors.white))),
+                                              color: Colors.white))),
                                 ), // Positioned(
                                 Padding(
                                   padding: const EdgeInsets.all(2.0),
@@ -180,7 +185,8 @@ class _WallpaperListState extends State<WallpaperList> {
                                     child: Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: <Widget>[
                                         Icon(
                                           FontAwesomeIcons.arrowUp,
