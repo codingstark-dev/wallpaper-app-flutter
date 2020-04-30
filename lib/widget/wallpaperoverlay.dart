@@ -66,10 +66,17 @@ class _WallpaperListState extends State<WallpaperList> {
                                   ChangeNotifierProvider<AmoledFirebase>(
                                     create: (context) => AmoledFirebase(),
                                     child: WallpaperDetail(
+                                      sizeofimage:
+                                          "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                              "x " +
+                                              "${amoledFirebase.wallpaper.imageheight[index]}",
+                                      author: amoledFirebase
+                                          .wallpaper.author[index],
+                                      ups: amoledFirebase.wallpaper.ups[index],
                                       url: amoledFirebase.wallpaper.url[index],
                                       index: index,
                                       title:
-                                          amoledFirebase.wallpaper.title[index],
+                                          amoledFirebase.wallpaper.title[index].toString().dbFilterTitle,
                                     ),
                                   )));
                       // print(index);
@@ -123,91 +130,114 @@ class _WallpaperListState extends State<WallpaperList> {
                                 )),
                           ),
                           Positioned(
-                            top: 215,
-                            //     left: 75
+                            left: 10,
+                            top: 10,
+                            child: Padding(
+                              padding: const EdgeInsets.all(2.0),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    color: gainsborohs.withOpacity(0.6),
+                                    border: Border.all(
+                                        width: 1, color: gainsborohs)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Text(
+                                      "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                          "x " +
+                                          "${amoledFirebase.wallpaper.imageheight[index]}",
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 9,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white)),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Positioned(
+                            bottom: 40,
+                            left: 5,
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Container(
+                                // Padding(
+                                //   padding: const EdgeInsets.all(2.0),
+                                //   child: Container(
+                                //     decoration: BoxDecoration(
+                                //         borderRadius: BorderRadius.circular(5),
+                                //         color: gainsborohs.withOpacity(0.6),
+                                //         border: Border.all(
+                                //             width: 1, color: gainsborohs)),
+                                //     child: Padding(
+                                //       padding: const EdgeInsets.all(3.0),
+                                //       child: Text(
+                                //           "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                //               "x " +
+                                //               "${amoledFirebase.wallpaper.imageheight[index]}",
+                                //           textAlign: TextAlign.left,
+                                //           style: TextStyle(
+                                //               fontSize: 9,
+                                //               fontWeight: FontWeight.bold,
+                                //               color: Colors.white)),
+                                //     ),
+                                //   ),
+                                // ),
+
+                                Container(
+                                    padding: EdgeInsets.all(3),
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         color: gainsborohs.withOpacity(0.6),
                                         border: Border.all(
                                             width: 1, color: gainsborohs)),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(3.0),
-                                      child: Text(
-                                          "${amoledFirebase.wallpaper.imagewidth[index]} " +
-                                              "x " +
-                                              "${amoledFirebase.wallpaper.imageheight[index]}",
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontSize: 9,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white)),
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Container(
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color: gainsborohs.withOpacity(0.6),
-                                          border: Border.all(
-                                              width: 1, color: gainsborohs)),
-                                      child: Text(
-                                          filesize(amoledFirebase
-                                              .wallpaper.imagebytes[index]
-                                              .toString()),
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontSize: 9,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white))),
-                                ), // Positioned(
-                                Padding(
-                                  padding: const EdgeInsets.all(2.0),
-                                  child: Container(
-                                    // margin: EdgeInsets.all(15),
-                                    padding: EdgeInsets.all(3),
-                                    decoration: BoxDecoration(
-                                      color: gainsborohs.withOpacity(0.6),
-                                      border: Border.all(
-                                          width: 1, color: gainsborohs),
-                                      borderRadius: BorderRadius.circular(5),
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: <Widget>[
-                                        Icon(
-                                          FontAwesomeIcons.arrowUp,
-                                          size: 9,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(
-                                          width: 5,
-                                        ),
-                                        Text(
-                                          amoledFirebase.wallpaper.ups[index]
-                                              .toString(),
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 9,
+                                    child: Text(
+                                        filesize(amoledFirebase
+                                            .wallpaper.imagebytes[index]
+                                            .toString()),
+                                        textAlign: TextAlign.left,
+                                        style: TextStyle(
+                                            fontSize: 10,
                                             fontWeight: FontWeight.bold,
-                                          ),
+                                            color: Colors.white))),
+                                SizedBox(
+                                  width: 6,
+                                ),
+                                Container(
+                                  // margin: EdgeInsets.all(15),
+                                  padding: EdgeInsets.all(3),
+                                  decoration: BoxDecoration(
+                                    color: gainsborohs.withOpacity(0.6),
+                                    border: Border.all(
+                                        width: 1, color: gainsborohs),
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        FontAwesomeIcons.thumbsUp,
+                                        size: 10,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        amoledFirebase.wallpaper.ups[index]
+                                            .toString(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],

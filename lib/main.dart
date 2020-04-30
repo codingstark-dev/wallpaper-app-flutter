@@ -1,4 +1,6 @@
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -17,15 +19,18 @@ void main() {
   } catch (e) {
     print(e.toString());
   }
-  runApp(MaterialApp(
-    home: MultiProvider(providers: [
-      ChangeNotifierProvider<AmoledFirebase>(
-        create: (context) => AmoledFirebase(),
-      ),
-    ], child: MainScreenPage()),
-    initialRoute: HomePage,
-    onGenerateRoute: router.generateRoute,
-    debugShowCheckedModeBanner: false,
+  runApp(DevicePreview(
+    enabled: kReleaseMode,
+    builder: (context) => MaterialApp(
+      home: MultiProvider(providers: [
+        ChangeNotifierProvider<AmoledFirebase>(
+          create: (context) => AmoledFirebase(),
+        ),
+      ], child: MainScreenPage()),
+      initialRoute: HomePage,
+      onGenerateRoute: router.generateRoute,
+      debugShowCheckedModeBanner: false,
+    ),
   ));
 }
 

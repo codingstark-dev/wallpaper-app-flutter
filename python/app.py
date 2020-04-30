@@ -28,6 +28,7 @@ def redditdatas():
                 # print(submission.preview)
                 url2 = submission.url
                 filename = submission.title
+                lol = submission.over_18
                 author = str(submission.author)
                 ups = submission.ups
                 created_utc = submission.created_utc
@@ -43,7 +44,7 @@ def redditdatas():
                 url.headers['Content-Length']
                 imagebytes = url.headers['Content-Length']
                 imagesize = image_obj.size
-
+                print(lol)
                 listfile.append({
                     "image": url2,
                     "title": filename,

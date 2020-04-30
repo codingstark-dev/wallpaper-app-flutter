@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:extended_image/extended_image.dart';
@@ -5,22 +6,33 @@ import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 
 class WallpaperDetail extends StatefulWidget {
-  WallpaperDetail({Key key, this.index, this.url, this.title})
+  WallpaperDetail(
+      {Key key,
+      @required this.index,
+      @required this.url,
+      @required this.title,
+      @required this.author,
+      @required this.ups,
+      @required this.sizeofimage})
       : super(key: key);
 
   final int index;
   final String title;
   final String url;
-
+  final String author;
+  final int ups;
+  final String sizeofimage;
   @override
   _WallpaperDetailState createState() => _WallpaperDetailState();
 }
@@ -28,24 +40,26 @@ class WallpaperDetail extends StatefulWidget {
 class _WallpaperDetailState extends State<WallpaperDetail> {
   bool detailbox = true;
   bool status = false;
+  StreamController streamController = BehaviorSubject();
 
   @override
   void initState() {
     super.initState();
     if (mounted) {
       setState(() {
-        // if (sl.call<AmoledFirebase>().loadingval.floor() == 100 ||
-        //     sl.call<AmoledFirebase>().loadingval.floor() == 99 ||
-        //     sl.call<AmoledFirebase>().loadingval.floor() == 98) {
-        //   sl.get<AmoledFirebase>().updateboxstatus(true);
-        //   if (sl.call<AmoledFirebase>().loadingval.floor() == 100) {
-        //     sl.get<AmoledFirebase>().updateboxstatus(true);
-        //   } else {
-        //     sl.get<AmoledFirebase>().updateboxstatus(false);
-        //   }
-        // }
+        streamController.stream.listen((event) {
+          if (event == LoadState.loading) {
+            sl.get<AmoledFirebase>().updateboxstatus(false);
+          } else if (event == LoadState.completed) {
+            setState(() {
+              sl.get<AmoledFirebase>().updateboxstatus(true);
+            });
+            streamController.done.whenComplete(() => streamController.close());
+          } else if (event == LoadState.failed) {
+            sl.get<AmoledFirebase>().updateboxstatus(false);
+          }
+        });
 
-        sl.get<AmoledFirebase>().updateboxstatus(true);
         changeStatusBar();
         status = false;
         // detailbox = true;
@@ -54,12 +68,31 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
       return null;
   }
 
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   setState(() {
+  //     if (event == LoadState.loading) {
+  //       sl.get<AmoledFirebase>().updateboxstatus(false);
+  //     } else if (sl.get<AmoledFirebase>().loadingval == LoadState.completed) {
+  //       sl.get<AmoledFirebase>().updateboxstatus(true);
+  //     } else if (sl.get<AmoledFirebase>().loadingval == LoadState.failed) {
+  //       sl.get<AmoledFirebase>().updateboxstatus(false);
+  //     }
+  //   });
+  //   sl.get<AmoledFirebase>().notifyListeners();
+  // }
+
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    sl.get<AmoledFirebase>().updateboxstatus(false);
-    // sl.get<AmoledFirebase>().updateloadingval(0);
+    sl.resetLazySingleton<AmoledFirebase>(
+      disposingFunction: (s) => s.dispose(),
+    );
+    streamController.close();
+
+    // sl.get<AmoledFirebase>().updateboxstatus(false);
   }
 
   void changeStatusBar() {
@@ -125,17 +158,19 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
     // ));
     AmoledFirebase amoled = Provider.of<AmoledFirebase>(context, listen: true);
     if (!mounted) return null;
-
-   
-      print(sl.get<AmoledFirebase>().loadingval.toString());
-  
-
-    return Scaffold(
-      extendBodyBehindAppBar: true,
-      extendBody: true,
-      resizeToAvoidBottomPadding: false,
-      resizeToAvoidBottomInset: false,
-      body: Container(
+    setState(() {
+      if (sl.get<AmoledFirebase>().loadingval == LoadState.loading) {
+        sl.get<AmoledFirebase>().updateboxstatus(false);
+      } else if (sl.get<AmoledFirebase>().loadingval == LoadState.completed) {
+        sl.get<AmoledFirebase>().updateboxstatus(true);
+      } else if (sl.get<AmoledFirebase>().loadingval == LoadState.failed) {
+        sl.get<AmoledFirebase>().updateboxstatus(false);
+      }
+    });
+    var screensize = MediaQuery.of(context).size;
+    return Material(
+      color: darkslategrayhs,
+      child: Container(
         width: double.infinity,
         height: double.infinity,
         child: InkWell(
@@ -162,20 +197,39 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                   color: darkslategrayhs,
                   child: ExtendedImage.network(
                     widget.url,
-                    filterQuality: FilterQuality.high,
+                    headers: {
+                      "User-Agent":
+                          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
+                    },
+                    filterQuality: FilterQuality.high, retries: 30,
+                    enableSlideOutPage: true,
+                    // enableMemoryCache: true,
                     handleLoadingProgress: true,
+                    cache: false,
                     fit: BoxFit.cover,
                     enableLoadState: true,
                     loadStateChanged: (state) {
+                      streamController.add(state.extendedImageLoadState);
                       switch (state.extendedImageLoadState) {
-                        case LoadState.loading:
-                          amoled.updateloadingval(LoadState.loading.toString());
-                          break;
                         case LoadState.completed:
-                          amoled.updateloadingval(LoadState.completed.toString());
+                          // print(state.extendedImageLoadState);
+
+                          sl
+                              .get<AmoledFirebase>()
+                              .updateloadingval(LoadState.completed);
                           break;
+                        case LoadState.loading:
+                          sl.get<AmoledFirebase>().updateboxstatus(false);
+
+                          sl
+                              .get<AmoledFirebase>()
+                              .updateloadingval(LoadState.loading);
+                          break;
+
                         case LoadState.failed:
-                          amoled.updateloadingval(LoadState.failed.toString());
+                          sl
+                              .get<AmoledFirebase>()
+                              .updateloadingval(LoadState.failed);
                           break;
                         default:
                       }
@@ -380,63 +434,178 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                     width: 0,
                   )
                 else if (sl.call<AmoledFirebase>().status == true)
-                  Positioned(
-                    top: 520,
-                    child: Visibility(
-                      visible: !status,
-                      child: Center(
-                        child: Container(
-                          height: 200,
-                          width: 350,
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: gainsborohs.withOpacity(0.4),
-                            // border: Border.all(width: 1, color: gainsborohs)
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    "1802 x 1283",
-                                    style: TextStyle(
-                                        color: gainsborohs, fontSize: 15),
+                  PositionedDirectional(
+                    bottom: 10,
+                    child: SafeArea(
+                      bottom: true,
+                      child: Visibility(
+                        visible: !status,
+                        child: Center(
+                          child: Container(
+                            height: 200,
+                            width: screensize.width * 0.90,
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(5),
+                              color: gainsborohs.withOpacity(0.4),
+                              // border: Border.all(width: 1, color: gainsborohs)
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        // height: 20,
+                                        // width: 100,
+                                        padding: EdgeInsets.all(2),
+                                        // margin: EdgeInsets.all(3),
+                                        decoration: BoxDecoration(
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: gainsborohs.withOpacity(0.4),
+                                            border: Border.all(
+                                                width: 1, color: gainsborohs)),
+                                        child: Text(
+                                          widget.sizeofimage,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 15),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: <Widget>[
-                                  SizedBox(
-                                    height: 30,
-                                    child: RaisedButton.icon(
-                                      icon: Icon(Icons.ac_unit),
-                                      label: Text("data"),
-                                      onPressed: () {},
+                                ),SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(3.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: <Widget>[
+                                      Icon(
+                                        FontAwesomeIcons.thumbsUp,
+                                        size: 20,
+                                        color: Colors.white,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                       widget.ups.toString(),
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Container(
+                                        // height: 20,
+                                        // width: 100,
+                                        padding: EdgeInsets.all(2),
+                                        // margin: EdgeInsets.all(3),
+                                        // decoration: BoxDecoration(
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(5),
+                                        //     color: gainsborohs.withOpacity(0.4),
+                                        //     border: Border.all(
+                                        //         width: 1, color: gainsborohs)),
+                                        child: Text(
+                                          widget.title,
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),SizedBox(
+                                  height: 5,
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      "By ",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.bold),
                                     ),
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                    child: RaisedButton.icon(
-                                      icon: Icon(Icons.ac_unit),
-                                      label: Text("data"),
-                                      onPressed: () {},
+                                    Container(
+                                      // height: 20,
+                                      // width: 100,
+                                      padding: EdgeInsets.all(2),
+                                      // margin: EdgeInsets.all(3),
+                                      decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: gainsborohs.withOpacity(0.4),
+                                          border: Border.all(
+                                              width: 1, color: gainsborohs)),
+                                      child: Text(
+                                      widget.author,
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 17,
+                                            fontWeight: FontWeight.bold),
+                                      ),
                                     ),
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(5.0),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: <Widget>[
+                                      SizedBox(
+                                        height: 30,
+                                        child: RaisedButton.icon(
+                                          icon: Icon(Icons.file_download),
+                                          label: Text("Download"),
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                        child: RaisedButton.icon(
+                                          icon: Icon(Icons.add_to_home_screen),
+                                          label: Text("Set Wallpaper"),
+                                          onPressed: () {},
+                                        ),
+                                      ),
+                                      // SizedBox(
+                                      //   height: 30,
+                                      //   child: RaisedButton.icon(
+                                      //     icon: Icon(Icons.ac_unit),
+                                      //     label: Text("Set Both"),
+                                      //     onPressed: () {},
+                                      //   ),
+                                      // ),
+                                    ],
                                   ),
-                                  SizedBox(
-                                    height: 30,
-                                    child: RaisedButton.icon(
-                                      icon: Icon(Icons.ac_unit),
-                                      label: Text("data"),
-                                      onPressed: () {},
-                                    ),
-                                  ),
-                                ],
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -513,5 +682,9 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
             ),
       ),
     );
+  }
+
+  void rebuild() {
+    setState(() {});
   }
 }

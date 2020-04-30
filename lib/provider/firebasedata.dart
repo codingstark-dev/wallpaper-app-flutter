@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:wallpaper/freezed/wallpaper.dart';
 import 'package:extended_image/extended_image.dart';
 
@@ -7,8 +7,7 @@ class AmoledFirebase with ChangeNotifier {
   List firebasedb = [];
 
   bool status = false;
-  String loadingval;
-  
+  LoadState loadingval ;
 
   addWallpaper(List data) {
     for (var i = 0; i < data.length; i++) {
@@ -34,7 +33,7 @@ class AmoledFirebase with ChangeNotifier {
     return status = val;
   }
 
-  String updateloadingval(String val) {
+  LoadState updateloadingval(LoadState val) {
     return loadingval = val;
   }
 }
