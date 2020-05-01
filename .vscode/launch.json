@@ -8,7 +8,8 @@
             "name": "Flutter",
             "request": "launch",
             "type": "dart"
-            // "args": ["-v"]
+            // ,
+            // "args": ["--profile"]
         }
     ]
 }

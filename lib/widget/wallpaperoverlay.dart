@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:filesize/filesize.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
+import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -59,27 +61,44 @@ class _WallpaperListState extends State<WallpaperList> {
                       // crud("newwallpaper/", Delete(index));
                       // amoledFirebase..removeList(index);
                       // amoledFirebase.removeList(index);
-                      Navigator.push(
-                          context,
-                          CupertinoPageRoute(
-                              builder: (BuildContext context) =>
-                                  ChangeNotifierProvider<AmoledFirebase>(
-                                    create: (context) => AmoledFirebase(),
-                                    child: WallpaperDetail(
-                                      sizeofimage:
-                                          "${amoledFirebase.wallpaper.imagewidth[index]} " +
-                                              "x " +
-                                              "${amoledFirebase.wallpaper.imageheight[index]}",
-                                      author: amoledFirebase
-                                          .wallpaper.author[index],
-                                      ups: amoledFirebase.wallpaper.ups[index],
-                                      url: amoledFirebase.wallpaper.url[index],
-                                      index: index,
-                                      title:
-                                          amoledFirebase.wallpaper.title[index].toString().dbFilterTitle,
-                                    ),
-                                  )));
-                      // print(index);
+                      ExtendedNavigator.rootNavigator.pushNamed(
+                          Routes.wallpaperDetail,
+                          arguments: WallpaperDetailArguments(
+                              index: index,
+                              url: amoledFirebase.wallpaper.url[index],
+                              title: amoledFirebase.wallpaper.title[index]
+                                  .toString()
+                                  .dbFilterTitle,
+                              author: amoledFirebase.wallpaper.author[index],
+                              ups: amoledFirebase.wallpaper.ups[index],
+                              sizeofimage:
+                                  "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                      "x " +
+                                      "${amoledFirebase.wallpaper.imageheight[index]}"));
+
+                      // Navigator.push(
+                      //     context,
+                      //     CupertinoPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             ChangeNotifierProvider<AmoledFirebase>(
+                      //               create: (context) => AmoledFirebase(),
+                      //               child: WallpaperDetail(
+                      //                 sizeofimage:
+                      //                     "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                      //                         "x " +
+                      //                         "${amoledFirebase.wallpaper.imageheight[index]}",
+                      //                 author: amoledFirebase
+                      //                     .wallpaper.author[index],
+                      //                 ups: amoledFirebase.wallpaper.ups[index],
+                      //                 url: amoledFirebase.wallpaper.url[index],
+                      //                 index: index,
+                      //                 title: amoledFirebase
+                      //                     .wallpaper.title[index]
+                      //                     .toString()
+                      //                     .dbFilterTitle,
+                      //               ),
+                      //             )));
+                      // // print(index);
                     },
                     child: ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(10)),

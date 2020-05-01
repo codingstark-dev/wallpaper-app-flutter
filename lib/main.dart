@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -7,11 +8,10 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
-import 'package:wallpaper/route/const_route.dart';
+import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper/widget/hometext.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
-import 'route/route.dart' as router;
 
 void main() {
   try {
@@ -22,13 +22,18 @@ void main() {
   runApp(DevicePreview(
     enabled: kReleaseMode,
     builder: (context) => MaterialApp(
-      home: MultiProvider(providers: [
-        ChangeNotifierProvider<AmoledFirebase>(
-          create: (context) => AmoledFirebase(),
+      builder: (context, child) => MultiProvider(
+        providers: [
+          ChangeNotifierProvider<AmoledFirebase>(
+            create: (context) => AmoledFirebase(),
+          ),
+        ],
+        child: ExtendedNavigator(
+          router: Router(),
         ),
-      ], child: MainScreenPage()),
-      initialRoute: HomePage,
-      onGenerateRoute: router.generateRoute,
+      ),
+      // initialRoute: Routes.mainScreenPage,
+      // onGenerateRoute: Router().onGenerateRoute,
       debugShowCheckedModeBanner: false,
     ),
   ));
@@ -47,9 +52,14 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     super.initState();
     checkPermission();
-    FirebaseDatabase.instance.reference().child("newwallpaper/new").once().then(
-        (value) => Provider.of<AmoledFirebase>(context, listen: false)
-            .addWallpaper(value.value));
+    FirebaseDatabase.instance
+        .reference()
+        .child("newwallpaper/new")
+        .once()
+        .then((value) {
+      return Provider.of<AmoledFirebase>(context, listen: false)
+          .addWallpaper(value.value);
+    });
     FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     firebaseInstance.goOnline();

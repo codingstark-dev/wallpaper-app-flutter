@@ -36,6 +36,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.4.1"
+  auto_route:
+    dependency: "direct main"
+    description:
+      name: auto_route
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.5"
+  auto_route_generator:
+    dependency: "direct dev"
+    description:
+      name: auto_route_generator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.8"
   boolean_selector:
     dependency: transitive
     description:
@@ -190,6 +204,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.9"
+  expandable_bottom_bar:
+    dependency: "direct main"
+    description:
+      name: expandable_bottom_bar
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   extended_image:
     dependency: "direct overridden"
     description:
