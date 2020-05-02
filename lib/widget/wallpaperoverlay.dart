@@ -12,6 +12,7 @@ import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:extended_image/extended_image.dart';
 
 class WallpaperList extends StatefulWidget {
   const WallpaperList({
@@ -58,12 +59,21 @@ class _WallpaperListState extends State<WallpaperList> {
                 Expanded(
                   child: InkWell(
                     onTap: () {
+                      List lol = amoledFirebase.wallpaper.url[index]
+                          .toString()
+                          .split(".");
+                      // print(lol);
+                      // print(amoledFirebase.wallpaper.url[index]);
                       // crud("newwallpaper/", Delete(index));
                       // amoledFirebase..removeList(index);
                       // amoledFirebase.removeList(index);
                       ExtendedNavigator.rootNavigator.pushNamed(
                           Routes.wallpaperDetail,
                           arguments: WallpaperDetailArguments(
+                              imageextenstion: lol[3],
+                              imagebytes: filesize(amoledFirebase
+                                  .wallpaper.imagebytes[index]
+                                  .toString()),
                               index: index,
                               url: amoledFirebase.wallpaper.url[index],
                               title: amoledFirebase.wallpaper.title[index]
@@ -71,6 +81,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                   .dbFilterTitle,
                               author: amoledFirebase.wallpaper.author[index],
                               ups: amoledFirebase.wallpaper.ups[index],
+                              date: timeago.format(date).toString(),
                               sizeofimage:
                                   "${amoledFirebase.wallpaper.imagewidth[index]} " +
                                       "x " +
@@ -107,47 +118,53 @@ class _WallpaperListState extends State<WallpaperList> {
                         alignment: Alignment.bottomCenter,
                         children: [
                           Positioned.fill(
-                            child: Container(
-                                color: Colors.white,
-                                height: 400,
-                                width: 250,
-                                child: Image.network(
-                                  amoledFirebase.wallpaper.preview[index],
-                                  fit: BoxFit.cover,
-                                  filterQuality: FilterQuality.low,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    if (mounted) {
-                                      amoledFirebase.removeList(index);
-                                      return Center(
-                                          child: Text(
-                                              "😞 Sorry Author Removed Image"));
-                                    } else {
-                                      return null;
-                                    }
-                                  },
-                                  loadingBuilder:
-                                      (context, child, loadingProgress) {
-                                    if (loadingProgress == null) return child;
-                                    return SpinKitThreeBounce(
-                                      size: 14,
-                                      color: darkslategrayhs,
-                                    );
-                                    // return Center(
-                                    //   child: CircularProgressIndicator(
-                                    //     backgroundColor: darkslategrayhs,
-                                    //     value: loadingProgress
-                                    //                 .expectedTotalBytes !=
-                                    //             null
-                                    //         ? loadingProgress
-                                    //                 .cumulativeBytesLoaded /
-                                    //             loadingProgress
-                                    //                 .expectedTotalBytes
-                                    //         : null,
-                                    //   ),
-                                    // );
-                                  },
-                                )),
-                          ),
+                              child: Container(
+                                  color: Colors.white,
+                                  height: 400,
+                                  width: 250,
+                                  child: ExtendedImage.network(
+                                    amoledFirebase.wallpaper.preview[index],
+                                    fit: BoxFit.cover,
+                                  )
+
+                                  //  Image.network(
+                                  //   amoledFirebase.wallpaper.preview[index],
+                                  //   fit: BoxFit.cover,
+                                  //   filterQuality: FilterQuality.low,
+                                  //   errorBuilder: (context, error, stackTrace) {
+                                  //     if (mounted) {
+                                  //       amoledFirebase.removeList(index);
+                                  //       return Center(
+                                  //           child: Text(
+                                  //               "😞 Sorry Author Removed Image"));
+                                  //     } else {
+                                  //       return null;
+                                  //     }
+                                  //   },
+                                  //   loadingBuilder:
+                                  //       (context, child, loadingProgress) {
+                                  //     if (loadingProgress == null) return child;
+                                  //     return SpinKitThreeBounce(
+                                  //       size: 14,
+                                  //       color: darkslategrayhs,
+                                  //     );
+                                  //     // return Center(
+                                  //     //   child: CircularProgressIndicator(
+                                  //     //     backgroundColor: darkslategrayhs,
+                                  //     //     value: loadingProgress
+                                  //     //                 .expectedTotalBytes !=
+                                  //     //             null
+                                  //     //         ? loadingProgress
+                                  //     //                 .cumulativeBytesLoaded /
+                                  //     //             loadingProgress
+                                  //     //                 .expectedTotalBytes
+                                  //     //         : null,
+                                  //     //   ),
+                                  //     // );
+                                  //   },
+                                  // )),
+
+                                  )),
                           Positioned(
                             left: 10,
                             top: 10,

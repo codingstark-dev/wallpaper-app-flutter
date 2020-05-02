@@ -48,7 +48,10 @@ class Router extends RouterBase {
               title: typedArgs.title,
               author: typedArgs.author,
               ups: typedArgs.ups,
-              sizeofimage: typedArgs.sizeofimage),
+              sizeofimage: typedArgs.sizeofimage,
+              date: typedArgs.date,
+              imagebytes: typedArgs.imagebytes,
+              imageextenstion: typedArgs.imageextenstion),
           settings: settings,
         );
       default:
@@ -76,6 +79,9 @@ class WallpaperDetailArguments {
   final String author;
   final int ups;
   final String sizeofimage;
+  final String date;
+  final String imagebytes;
+  final String imageextenstion;
   WallpaperDetailArguments(
       {this.key,
       @required this.index,
@@ -83,5 +89,8 @@ class WallpaperDetailArguments {
       @required this.title,
       @required this.author,
       @required this.ups,
-      @required this.sizeofimage});
+      @required this.sizeofimage,
+      @required this.date,
+      @required this.imagebytes,
+      @required this.imageextenstion});
 }

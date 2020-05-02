@@ -20,7 +20,7 @@ void main() {
     print(e.toString());
   }
   runApp(DevicePreview(
-    enabled: kReleaseMode,
+    enabled: !kReleaseMode,
     builder: (context) => MaterialApp(
       builder: (context, child) => MultiProvider(
         providers: [
