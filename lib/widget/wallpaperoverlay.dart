@@ -125,6 +125,27 @@ class _WallpaperListState extends State<WallpaperList> {
                                   child: ExtendedImage.network(
                                     amoledFirebase.wallpaper.preview[index],
                                     fit: BoxFit.cover,
+                                    enableLoadState: true,
+                                    handleLoadingProgress: true,
+                                    loadStateChanged: (state) {
+                                      switch (state.extendedImageLoadState) {
+                                        case LoadState.loading:
+                                          return SpinKitThreeBounce(
+                                            size: 14,
+                                            color: darkslategrayhs,
+                                          );
+                                          break;
+                                        case LoadState.failed:
+                                          amoledFirebase.removeList(index);
+                                          return Center(
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(3.0),
+                                            child: Text(
+                                                "😞 Sorry Author Removed Image"),
+                                          ));
+                                        default:
+                                      }
+                                    },
                                   )
 
                                   //  Image.network(

@@ -20,7 +20,7 @@ void main() {
     print(e.toString());
   }
   runApp(DevicePreview(
-    enabled: !kReleaseMode,
+    enabled: kReleaseMode,
     builder: (context) => MaterialApp(
       builder: (context, child) => MultiProvider(
         providers: [
@@ -60,14 +60,14 @@ class _MainScreenPageState extends State<MainScreenPage> {
       return Provider.of<AmoledFirebase>(context, listen: false)
           .addWallpaper(value.value);
     });
-    FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
+    // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
-    firebaseInstance.goOnline();
-    firebaseInstance.setPersistenceEnabled(true);
-    // firebaseInstance.setPersistenceCacheSizeBytes(1);
-    var databaseRef =
-        FirebaseDatabase.instance.reference().child("newwallpaper/new");
-    databaseRef.keepSynced(true);
+    // firebaseInstance.goOnline();
+    // firebaseInstance.setPersistenceEnabled(true);
+    // // firebaseInstance.setPersistenceCacheSizeBytes(1);
+    // var databaseRef =
+    //     FirebaseDatabase.instance.reference().child("newwallpaper/new");
+    // databaseRef.keepSynced(true);
   }
 
   Future checkPermission() async {
