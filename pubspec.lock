@@ -113,13 +113,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "7.0.9"
-  cached_network_image:
-    dependency: "direct main"
-    description:
-      name: cached_network_image
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "2.1.0+1"
   charcode:
     dependency: transitive
     description:
@@ -197,20 +190,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.4"
-  dio:
-    dependency: "direct main"
-    description:
-      name: dio
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "3.0.9"
-  expandable_bottom_bar:
-    dependency: "direct main"
-    description:
-      name: expandable_bottom_bar
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.2"
   extended_image:
     dependency: "direct overridden"
     description:
@@ -227,6 +206,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.2"
+  fab_circular_menu:
+    dependency: "direct main"
+    description:
+      name: fab_circular_menu
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   file:
     dependency: transitive
     description:
@@ -288,13 +274,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_advanced_networkimage:
-    dependency: "direct main"
-    description:
-      name: flutter_advanced_networkimage
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.7.0"
   flutter_cache_manager:
     dependency: "direct main"
     description:
@@ -309,13 +288,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.1.2+1"
-  flutter_svg:
-    dependency: "direct main"
-    description:
-      name: flutter_svg
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.17.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -383,7 +355,7 @@ packages:
     source: hosted
     version: "0.14.0+3"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       url: "https://pub.dartlang.org"
@@ -515,20 +487,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.6.4"
-  path_drawing:
-    dependency: transitive
-    description:
-      name: path_drawing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.4.1"
-  path_parsing:
-    dependency: transitive
-    description:
-      name: path_parsing
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.1.4"
   path_provider:
     dependency: "direct main"
     description:
@@ -796,9 +754,11 @@ packages:
   wallpaper_manager:
     dependency: "direct main"
     description:
-      name: wallpaper_manager
-      url: "https://pub.dartlang.org"
-    source: hosted
+      path: "."
+      ref: HEAD
+      resolved-ref: ea2d771378ecc46347dc7c05b63ee500d98da759
+      url: "git://github.com/AdityaMulgundkar/wallpaper_manager.git"
+    source: git
     version: "1.0.7"
   watcher:
     dependency: transitive

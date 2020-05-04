@@ -1,11 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
-import 'package:expandable_bottom_bar/expandable_bottom_bar.dart';
 import 'package:extended_image/extended_image.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -146,6 +144,9 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
 
   Future setwallpaper() async {
     String platformVersion;
+    // setState(() {
+    //   loadingBool = true;
+    // });
 
     try {
       platformVersion = await WallpaperManager.platformVersion;
@@ -155,28 +156,21 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
 
     if (!mounted) return;
     print(platformVersion);
-    try {
-      var file = await DefaultCacheManager().getSingleFile(widget.url);
-      // Platform messages may fail, so we use a try/catch PlatformException.
-      setState(() {
-        loadingBool = true;
-      });
-      await WallpaperManager.setWallpaperFromFile(
-              file.path, WallpaperManager.HOME_SCREEN)
-          .then((value) => print(value));
-      // .whenComplete(() => Fluttertoast.showToast(msg: "Wallpaper Applied"))
-      // .catchError((onError) =>
-      //     Fluttertoast.showToast(msg: "Something Went Wrong $onError"));
-      await WallpaperManager.setWallpaperFromFile(
-          file.path, WallpaperManager.LOCK_SCREEN);
-      // print(file.path);
-      // result = await Dio().download(file.path, "Download/");
-      // File _file = File(file.path);
-      // var basenam = basename(_file.path);
-      // saveFile(file, basenam.split(".")[1]);
-    } catch (e) {
-      print(e.toString());
-    }
+
+    var file = await DefaultCacheManager().getSingleFile(widget.url);
+    // Platform messages may fail, so we use a try/catch PlatformException.
+
+    await WallpaperManager.setWallpaperFromFile(
+        file.path, WallpaperManager.HOME_SCREEN);
+    // .catchError((onError) =>
+    //     Fluttertoast.showToast(msg: "Something Went Wrong $onError"));
+    await WallpaperManager.setWallpaperFromFile(
+        file.path, WallpaperManager.LOCK_SCREEN);
+    // print(file.path);
+    // result = await Dio().download(file.path, "Download/");
+    // File _file = File(file.path);
+    // var basenam = basename(_file.path);
+    // saveFile(file, basenam.split(".")[1]);
   }
 
   Future<File> saveFile() async {
@@ -235,7 +229,13 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
     // }
 
     return (loadingBool == true)
-        ? Center(child: CircularProgressIndicator())
+        ? Material(
+            color: darkslategrayhs,
+            child: Center(
+                child: Text(
+              "Be Patient Wallpaper Applying...",
+              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: gainsborohs),
+            )))
         : Material(
             color: darkslategrayhs,
             child: Container(
@@ -539,24 +539,8 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                       color: Colors.white,
                                                       onPressed: () async {
                                                         await saveFile()
-                                                            .then((value) =>
-                                                                Center(
-                                                                  child:
-                                                                      CircularProgressIndicator(),
-                                                                ))
-                                                            .whenComplete(() {
-                                                          setState(() {
-                                                            loadingBool = false;
-                                                          });
-                                                          return Fluttertoast
-                                                              .showToast(
-                                                                  msg:
-                                                                      "Download Complete Check Your Gallry");
-                                                        }).catchError(
+                                                            .catchError(
                                                                 (onError) {
-                                                          setState(() {
-                                                            loadingBool = false;
-                                                          });
                                                           return Fluttertoast
                                                               .showToast(
                                                                   msg:
@@ -585,13 +569,25 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                       iconSize: 25,
                                                       color: Colors.white,
                                                       onPressed: () async {
+                                                        setState(() {
+                                                          loadingBool = true;
+                                                        });
+                                                        await Fluttertoast
+                                                            .showToast(
+                                                                msg:
+                                                                    "Please Wait Wallpaper Applying");
+
                                                         await setwallpaper()
-                                                            .whenComplete(() =>
-                                                                Fluttertoast
-                                                                    .showToast(
-                                                                        msg:
-                                                                            "Wallpaper Applied"))
-                                                            .catchError((onError) =>
+                                                            .whenComplete(
+                                                                () async {
+                                                          setState(() {
+                                                            loadingBool = false;
+                                                          });
+                                                          await Fluttertoast
+                                                              .showToast(
+                                                                  msg:
+                                                                      "Wallpaper Applied");
+                                                        }).catchError((onError) =>
                                                                 Fluttertoast
                                                                     .showToast(
                                                                         msg:

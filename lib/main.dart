@@ -1,5 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
+import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -135,6 +136,24 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // print(scrollController.offset / 2 / 12);
 
     return Scaffold(
+      floatingActionButton: FabCircularMenu(
+        children: <Widget>[
+          IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                print('Home');
+              }),
+          IconButton(
+            icon: Icon(Icons.favorite),
+            onPressed: () {
+              print('Favorite');
+            },
+          )
+        ],
+        fabColor: gainsborohs,
+        ringColor: gainsborohs,
+        fabMargin: EdgeInsets.fromLTRB(20, 20, 20, 10),
+      ),
       backgroundColor: darkslategrayhs,
       appBar: PreferredSize(
           child: AppBar(
