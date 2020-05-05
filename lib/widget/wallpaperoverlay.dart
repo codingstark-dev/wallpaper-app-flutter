@@ -8,11 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
+import 'package:wallpaper/helper/list_s.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:extended_image/extended_image.dart';
+import 'package:wallpaper/service/locator.dart';
 
 class WallpaperList extends StatefulWidget {
   const WallpaperList({
@@ -502,6 +504,27 @@ extension StringExtensions on String {
     if (this != null) {
       http.Response response = await http.head(this);
       return response.statusCode;
+    }
+  }
+}
+
+extension Iconchanger on Widget {
+  Icon iconchange(lol) {
+    var list = sl.get<ListCollection>().list;
+    switch (lol) {
+      case "Home":
+        return list[0];
+        break;
+      case "Download":
+        return list[1];
+        break;
+      case "Privacy Policy":
+        return list[2];
+        break;
+      case "Contact Us":
+        return list[3];
+        break;
+      default:
     }
   }
 }

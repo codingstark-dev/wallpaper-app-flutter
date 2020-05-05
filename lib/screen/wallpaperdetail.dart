@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wallpaper/helper/color.dart';
@@ -234,7 +235,10 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
             child: Center(
                 child: Text(
               "Be Patient Wallpaper Applying...",
-              style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,color: gainsborohs),
+              style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: gainsborohs),
             )))
         : Material(
             color: darkslategrayhs,
@@ -538,7 +542,13 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                       iconSize: 25,
                                                       color: Colors.white,
                                                       onPressed: () async {
+                                                        await checkPermission();
                                                         await saveFile()
+                                                            .whenComplete(() =>
+                                                                Fluttertoast
+                                                                    .showToast(
+                                                                        msg:
+                                                                            "Downloaded, Check Your Gallery."))
                                                             .catchError(
                                                                 (onError) {
                                                           return Fluttertoast
@@ -937,5 +947,64 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                   ),
             ),
           );
+  }
+
+  Future checkPermission() async {
+    Permission status = Permission.storage;
+    if (await status.isUndetermined) {
+      Fluttertoast.showToast(
+          msg: "Please Allow Storage Permission For Set Wallpaper");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Done");
+        }
+      });
+    } else if (await status.isDenied) {
+      Fluttertoast.showToast(
+          msg: "Please Allow Storage Permission For Set Wallpaper");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    } else if (await status.isPermanentlyDenied) {
+      Fluttertoast.showToast(
+          msg:
+              "Go to Setting app manager and allow storage permission to access wallpapers");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    } else if (await status.isRestricted) {
+      Fluttertoast.showToast(
+          msg:
+              "Go to Setting app manager and allow storage permission to access wallpapers");
+      status.request().then((value) {
+        if (value.isDenied) {
+          Fluttertoast.showToast(
+              msg: "Please Allow Storage Permission For Set Wallpaper");
+          status.request();
+        } else if (value.isGranted) {
+          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
+        }
+      });
+    } else if (await status.isGranted) {
+      // Fluttertoast.showToast(
+      //   msg: "Enjoy!",
+      // );
+    }
   }
 }

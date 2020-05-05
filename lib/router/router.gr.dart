@@ -9,10 +9,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:wallpaper/main.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
+import 'package:wallpaper/screen/download.dart';
 
 abstract class Routes {
   static const mainScreenPage = '/';
   static const wallpaperDetail = '/wallpaper-detail';
+  static const downloadPage = '/download-page';
 }
 
 class Router extends RouterBase {
@@ -54,6 +56,16 @@ class Router extends RouterBase {
               imageextenstion: typedArgs.imageextenstion),
           settings: settings,
         );
+      case Routes.downloadPage:
+        if (hasInvalidArgs<DownloadPageArguments>(args)) {
+          return misTypedArgsRoute<DownloadPageArguments>(args);
+        }
+        final typedArgs =
+            args as DownloadPageArguments ?? DownloadPageArguments();
+        return MaterialPageRoute<dynamic>(
+          builder: (context) => DownloadPage(key: typedArgs.key),
+          settings: settings,
+        );
       default:
         return unknownRoutePage(settings.name);
     }
@@ -93,4 +105,10 @@ class WallpaperDetailArguments {
       @required this.date,
       @required this.imagebytes,
       @required this.imageextenstion});
+}
+
+//DownloadPage arguments holder class
+class DownloadPageArguments {
+  final Key key;
+  DownloadPageArguments({this.key});
 }
