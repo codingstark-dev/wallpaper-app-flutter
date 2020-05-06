@@ -27,7 +27,7 @@ class DownloadPage extends StatefulWidget {
 }
 
 class _DownloadPageState extends State<DownloadPage> {
-  List file = [];
+  List<io.FileSystemEntity> file = [];
   String directory;
 
   @override
@@ -42,14 +42,15 @@ class _DownloadPageState extends State<DownloadPage> {
         '${(await getExternalStorageDirectory()).path.replaceAll("Android/data/amoledwallpapers.foxywall/files", '')}refox';
 
     setState(() {
-      file = io.Directory("$directory").listSync(recursive: true,);
-        //use your folder name insted of resume.
+      file = io.Directory("$directory").listSync(
+        recursive: true,
+      );
+      //use your folder name insted of resume.
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    print(file);
     return SingleChildScrollView(
       child: Material(
         color: darkslategrayhs,
@@ -65,7 +66,7 @@ class _DownloadPageState extends State<DownloadPage> {
                 mainAxisSpacing: 1),
             padding: EdgeInsets.all(10),
             scrollDirection: Axis.vertical,
-            itemCount: 5,
+            itemCount: file.length,
             // itemCount: amoledFirebase.wallpaper.preview.length
             // widget.dataSnapshot.value.length
 
@@ -124,9 +125,12 @@ class _DownloadPageState extends State<DownloadPage> {
                                       height: 400,
                                       width: 250,
                                       child: ExtendedImage.file(
-                                        io.File(file[index].toString()),
+                                        io.File(file[index].path),
                                         fit: BoxFit.cover,
                                         enableLoadState: true,
+                                        loadStateChanged: (state) {
+                                          print(state.extendedImageInfo);
+                                        },
                                       ))),
 
                               //         //  Image.network(
@@ -246,42 +250,43 @@ class _DownloadPageState extends State<DownloadPage> {
                                     SizedBox(
                                       width: 6,
                                     ),
-                                    Container(
-                                      // margin: EdgeInsets.all(15),
-                                      padding: EdgeInsets.all(3),
-                                      decoration: BoxDecoration(
-                                        color: gainsborohs.withOpacity(0.6),
-                                        border: Border.all(
-                                            width: 1, color: gainsborohs),
-                                        borderRadius: BorderRadius.circular(5),
-                                      ),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: <Widget>[
-                                          Icon(
-                                            FontAwesomeIcons.thumbsUp,
-                                            size: 10,
-                                            color: Colors.white,
-                                          ),
-                                          SizedBox(
-                                            width: 5,
-                                          ),
-                                          // Text(
-                                          //   amoledFirebase.wallpaper.ups[index]
-                                          //       .toString(),
-                                          //   textAlign: TextAlign.center,
-                                          //   style: TextStyle(
-                                          //     color: Colors.white,
-                                          //     fontSize: 10,
-                                          //     fontWeight: FontWeight.bold,
-                                          //   ),
-                                          // ),
-                                        ],
-                                      ),
-                                    ),
+                                    // Container(
+                                    //   // margin: EdgeInsets.all(15),
+                                    //   padding: EdgeInsets.all(3),
+                                    //   decoration: BoxDecoration(
+                                    //     color: gainsborohs.withOpacity(0.6),
+                                    //     border: Border.all(
+                                    //         width: 1, color: gainsborohs),
+                                    //     borderRadius: BorderRadius.circular(5),
+                                    //   ),
+                                    //   child: Row(
+                                    //     crossAxisAlignment:
+                                    //         CrossAxisAlignment.center,
+                                    //     mainAxisAlignment:
+                                    //         MainAxisAlignment.start,
+                                    //     children: <Widget>[
+                                    //       Icon(
+                                    //         FontAwesomeIcons.thumbsUp,
+                                    //         size: 10,
+                                    //         color: Colors.white,
+                                    //       ),
+                                    //       SizedBox(
+                                    //         width: 5,
+                                    //       ),
+                                    //       // Text(
+                                    //       //   amoledFirebase.wallpaper.ups[index]
+                                    //       //       .toString(),
+                                    //       //   textAlign: TextAlign.center,
+                                    //       //   style: TextStyle(
+                                    //       //     color: Colors.white,
+                                    //       //     fontSize: 10,
+                                    //       //     fontWeight: FontWeight.bold,
+                                    //       //   ),
+                                    //       // ),
+                                    //     ],
+                                    //   ),
+                                    // ),
+                                  
                                   ],
                                 ),
                               ),
@@ -289,7 +294,7 @@ class _DownloadPageState extends State<DownloadPage> {
                                 child: Container(
                                   height: 33,
                                   width: 200,
-                                  color: gainsborohs,
+                                  // color: gainsborohs,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Row(
@@ -311,6 +316,7 @@ class _DownloadPageState extends State<DownloadPage> {
                                   ),
                                 ),
                               ),
+                         
                               // Positioned(
                               //   top: 215,
                               //   left: 110,
