@@ -33,7 +33,7 @@ class Router extends RouterBase {
         }
         final typedArgs =
             args as MainScreenPageArguments ?? MainScreenPageArguments();
-        return MaterialPageRoute<dynamic>(
+        return CupertinoPageRoute<dynamic>(
           builder: (context) => MainScreenPage(key: typedArgs.key),
           settings: settings,
         );
@@ -62,7 +62,7 @@ class Router extends RouterBase {
         }
         final typedArgs =
             args as DownloadPageArguments ?? DownloadPageArguments();
-        return MaterialPageRoute<dynamic>(
+        return CupertinoPageRoute<dynamic>(
           builder: (context) => DownloadPage(key: typedArgs.key),
           settings: settings,
         );

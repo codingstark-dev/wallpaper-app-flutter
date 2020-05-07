@@ -1,18 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:device_preview/device_preview.dart';
-import 'package:fab_circular_menu/fab_circular_menu.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/helper/list_s.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/service/locator.dart';
+import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
 import 'package:wallpaper/widget/hometext.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
 
@@ -55,7 +54,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   @override
   void initState() {
     super.initState();
-    checkPermission();
+    sl.get<WallpaperFun>().checkPermission();
     FirebaseDatabase.instance
         .reference()
         .child("newwallpaper/new")
@@ -74,95 +73,17 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // databaseRef.keepSynced(true);
   }
 
-  Future checkPermission() async {
-    Permission status = Permission.storage;
-    if (await status.isUndetermined) {
-      Fluttertoast.showToast(
-          msg: "Please Allow Storage Permission For Set Wallpaper");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isDenied) {
-      Fluttertoast.showToast(
-          msg: "Please Allow Storage Permission For Set Wallpaper");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isPermanentlyDenied) {
-      Fluttertoast.showToast(
-          msg:
-              "Go to Setting app manager and allow storage permission to access wallpapers");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isRestricted) {
-      Fluttertoast.showToast(
-          msg:
-              "Go to Setting app manager and allow storage permission to access wallpapers");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isGranted) {
-      Fluttertoast.showToast(
-        msg: "Welcome Back!",
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     // print(scrollController.offset / 2 / 12);
 
     return Scaffold(
-      floatingActionButton: FabCircularMenu(
-        children: <Widget>[
-          IconButton(
-              icon: Icon(Icons.home),
-              onPressed: () {
-                print('Home');
-              }),
-          IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () {
-              print('Favorite');
-            },
-          )
-        ],
-        fabColor: gainsborohs,
-        ringColor: gainsborohs,
-        fabMargin: EdgeInsets.fromLTRB(20, 20, 20, 10),
-      ),
       backgroundColor: darkslategrayhs,
       drawer: Container(
           color: darkslategrayhs,
           width: 210,
           child: Theme(
             data: Theme.of(context).copyWith(
-              // Set the transparency here
               canvasColor:
                   darkslategrayhs, //or any other color you want. e.g Colors.blue.withOpacity(0.5)
             ),
@@ -181,11 +102,26 @@ class _MainScreenPageState extends State<MainScreenPage> {
                                     color: Colors.transparent,
                                     child: InkWell(
                                       onTap: () {
-                                        ExtendedNavigator.rootNavigator
-                                            .pushNamed(Routes.downloadPage);
+                                        switch (e) {
+                                          case "Home":
+                                            Navigator.of(context).pop();
+                                            break;
+                                          case "Download":
+                                            ExtendedNavigator.rootNavigator
+                                                .pushNamed(Routes.downloadPage);
+                                            break;
+                                          case "Privacy Policy":
+                                            Navigator.of(context).pop();
+                                            break;
+                                          case "Contact Us":
+                                            Navigator.of(context).pop();
+                                            break;
+
+                                          default:
+                                        }
                                       },
                                       child: ListTile(
-                                        leading: widget.iconchange(e),
+                                        leading: Text("").iconchange(e),
                                         title: Text(
                                           e,
                                           style: TextStyle(
@@ -204,36 +140,41 @@ class _MainScreenPageState extends State<MainScreenPage> {
       appBar: PreferredSize(
           child: Builder(
             builder: (BuildContext context) => AppBar(
-              elevation: 0,
-              backgroundColor: darkslategrayhs,
-              centerTitle: false,
-              automaticallyImplyLeading: false,
-              actions: [
-                InkWell(
-                  borderRadius: BorderRadius.circular(100),
-                  onTap: () {},
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                elevation: 0,
+                backgroundColor: darkslategrayhs,
+                centerTitle: true,
+                automaticallyImplyLeading: false,
+                actions: [
+                  InkWell(
+                    borderRadius: BorderRadius.circular(100),
+                    onTap: () {},
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        "assets/svg/iconsmenu3.png",
+                        width: 30,
+                        height: 35,
+                      ),
+                    ),
+                  )
+                ],
+                leading: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: InkWell(
+                    // borderRadius: BorderRadius.circular(100),
+                    onTap: () {
+                      return Scaffold.of(context).openDrawer();
+                    },
                     child: Image.asset(
-                      "assets/svg/iconsmenu3.png",
+                      "assets/svg/iconsmenu2.png",
+                      height: 30,
                       width: 30,
-                      height: 35,
                     ),
                   ),
-                )
-              ],
-              title: InkWell(
-                // borderRadius: BorderRadius.circular(100),
-                onTap: () {
-                  return Scaffold.of(context).openDrawer();
-                },
-                child: Image.asset(
-                  "assets/svg/iconsmenu2.png",
-                  height: 30,
-                  width: 30,
                 ),
-              ),
-            ),
+                title: Image.asset(
+                  "assets/svg/icons.png",
+                )),
           ),
           preferredSize: Size(50, 55)),
       body: SafeArea(

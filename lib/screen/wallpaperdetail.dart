@@ -1,22 +1,17 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:ui';
 import 'package:extended_image/extended_image.dart';
 import 'package:filesize/filesize.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/service/locator.dart';
-import 'package:wallpaper_manager/wallpaper_manager.dart';
+import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
 
 class WallpaperDetail extends StatefulWidget {
   WallpaperDetail(
@@ -54,7 +49,6 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
 
     streamController.close();
@@ -98,6 +92,7 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
         status = false;
         // detailbox = true;
       });
+      sl.get<WallpaperFun>().createFolder();
     } else
       return null;
   }
@@ -123,69 +118,6 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
     } else {
       SystemChrome.setEnabledSystemUIOverlays(SystemUiOverlay.values);
     }
-  }
-
-  void createFolder() async {
-    Directory baseDir = await getExternalStorageDirectory(); //only for Android
-    // Directory baseDir = await getApplicationDocumentsDirectory(); //works for both iOS and Android
-    String dirToBeCreated = "refox";
-    String finalDir = join(
-        baseDir.path
-            .replaceAll("Android/data/amoledwallpapers.foxywall/files", ''),
-        dirToBeCreated);
-    var dir = Directory(finalDir);
-    bool dirExists = await dir.exists();
-    if (!dirExists) {
-      dir.create(recursive: true
-          /*recursive=true*/); //pass recursive as true if directory is recursive
-    }
-    //Now you can use this directory for saving file, etc.
-    //In case you are using external storage, make sure you have storage permissio
-  }
-
-  Future setwallpaper() async {
-    String platformVersion;
-    // setState(() {
-    //   loadingBool = true;
-    // });
-
-    try {
-      platformVersion = await WallpaperManager.platformVersion;
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-    }
-
-    if (!mounted) return;
-    print(platformVersion);
-
-    var file = await DefaultCacheManager().getSingleFile(widget.url);
-    // Platform messages may fail, so we use a try/catch PlatformException.
-
-    await WallpaperManager.setWallpaperFromFile(
-        file.path, WallpaperManager.HOME_SCREEN);
-    // .catchError((onError) =>
-    //     Fluttertoast.showToast(msg: "Something Went Wrong $onError"));
-    await WallpaperManager.setWallpaperFromFile(
-        file.path, WallpaperManager.LOCK_SCREEN);
-    // print(file.path);
-    // result = await Dio().download(file.path, "Download/");
-    // File _file = File(file.path);
-    // var basenam = basename(_file.path);
-    // saveFile(file, basenam.split(".")[1]);
-  }
-
-  Future<File> saveFile() async {
-    var file = await DefaultCacheManager()
-        .getSingleFile(widget.url); // File _file = File(file.path);
-    File _file = File(file.path);
-    var basenam = basename(_file.path);
-    var ext = basenam.split(".")[1];
-    final filePath =
-        '${(await getExternalStorageDirectory()).path.replaceAll("Android/data/amoledwallpapers.foxywall/files", '')}/refox/${widget.title}[refoxwall.com].$ext';
-    print(filePath);
-    return File(filePath)
-      ..createSync(recursive: true)
-      ..writeAsBytes(file.readAsBytesSync());
   }
 
   @override
@@ -256,7 +188,6 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                         amoled.updateboxstatus(false);
                         status = !status;
                         changeStatusBar();
-                        print(amoled.status);
                       });
                     } else
                       return null;
@@ -538,12 +469,20 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                   child: Material(
                                                     color: Colors.transparent,
                                                     child: IconButton(
+                                                      tooltip: "Save Wallpaper",
                                                       enableFeedback: true,
                                                       iconSize: 25,
                                                       color: Colors.white,
                                                       onPressed: () async {
-                                                        await checkPermission();
-                                                        await saveFile()
+                                                        await sl
+                                                            .get<WallpaperFun>()
+                                                            .checkPermission();
+
+                                                        await sl
+                                                            .get<WallpaperFun>()
+                                                            .saveFile(
+                                                                widget.url,
+                                                                widget.title)
                                                             .whenComplete(() =>
                                                                 Fluttertoast
                                                                     .showToast(
@@ -575,6 +514,7 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                   child: Material(
                                                     color: Colors.transparent,
                                                     child: IconButton(
+                                                      tooltip: "Set Wallpaper",
                                                       enableFeedback: true,
                                                       iconSize: 25,
                                                       color: Colors.white,
@@ -587,7 +527,10 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                                 msg:
                                                                     "Please Wait Wallpaper Applying");
 
-                                                        await setwallpaper()
+                                                        await sl
+                                                            .get<WallpaperFun>()
+                                                            .setwallpaper(
+                                                                widget.url)
                                                             .whenComplete(
                                                                 () async {
                                                           setState(() {
@@ -947,64 +890,5 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                   ),
             ),
           );
-  }
-
-  Future checkPermission() async {
-    Permission status = Permission.storage;
-    if (await status.isUndetermined) {
-      Fluttertoast.showToast(
-          msg: "Please Allow Storage Permission For Set Wallpaper");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Done");
-        }
-      });
-    } else if (await status.isDenied) {
-      Fluttertoast.showToast(
-          msg: "Please Allow Storage Permission For Set Wallpaper");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isPermanentlyDenied) {
-      Fluttertoast.showToast(
-          msg:
-              "Go to Setting app manager and allow storage permission to access wallpapers");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isRestricted) {
-      Fluttertoast.showToast(
-          msg:
-              "Go to Setting app manager and allow storage permission to access wallpapers");
-      status.request().then((value) {
-        if (value.isDenied) {
-          Fluttertoast.showToast(
-              msg: "Please Allow Storage Permission For Set Wallpaper");
-          status.request();
-        } else if (value.isGranted) {
-          Fluttertoast.showToast(msg: "Welcome To Refox Wallpaper App");
-        }
-      });
-    } else if (await status.isGranted) {
-      // Fluttertoast.showToast(
-      //   msg: "Enjoy!",
-      // );
-    }
   }
 }

@@ -3,7 +3,7 @@ import 'package:wallpaper/main.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
 import 'package:wallpaper/screen/download.dart';
 
-@MaterialAutoRouter()
+@CupertinoAutoRouter()
 class $Router {
   @initial
   MainScreenPage mainScreenPage;

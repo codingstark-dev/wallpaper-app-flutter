@@ -206,13 +206,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.2"
-  fab_circular_menu:
-    dependency: "direct main"
-    description:
-      name: fab_circular_menu
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.0"
   file:
     dependency: transitive
     description:
@@ -340,6 +333,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  google_fonts:
+    dependency: "direct main"
+    description:
+      name: google_fonts
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   graphs:
     dependency: transitive
     description:
