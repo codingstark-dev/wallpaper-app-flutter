@@ -677,3 +677,264 @@ abstract class Delete implements Union {
   int get index;
   $DeleteCopyWith<Delete> get copyWith;
 }
+
+class _$SearchDataTearOff {
+  const _$SearchDataTearOff();
+
+  _SearchData call(List<dynamic> searchData) {
+    return _SearchData(
+      searchData,
+    );
+  }
+}
+
+// ignore: unused_element
+const $SearchData = _$SearchDataTearOff();
+
+mixin _$SearchData {
+  List<dynamic> get searchData;
+
+  $SearchDataCopyWith<SearchData> get copyWith;
+}
+
+abstract class $SearchDataCopyWith<$Res> {
+  factory $SearchDataCopyWith(
+          SearchData value, $Res Function(SearchData) then) =
+      _$SearchDataCopyWithImpl<$Res>;
+  $Res call({List<dynamic> searchData});
+}
+
+class _$SearchDataCopyWithImpl<$Res> implements $SearchDataCopyWith<$Res> {
+  _$SearchDataCopyWithImpl(this._value, this._then);
+
+  final SearchData _value;
+  // ignore: unused_field
+  final $Res Function(SearchData) _then;
+
+  @override
+  $Res call({
+    Object searchData = freezed,
+  }) {
+    return _then(_value.copyWith(
+      searchData: searchData == freezed
+          ? _value.searchData
+          : searchData as List<dynamic>,
+    ));
+  }
+}
+
+abstract class _$SearchDataCopyWith<$Res> implements $SearchDataCopyWith<$Res> {
+  factory _$SearchDataCopyWith(
+          _SearchData value, $Res Function(_SearchData) then) =
+      __$SearchDataCopyWithImpl<$Res>;
+  @override
+  $Res call({List<dynamic> searchData});
+}
+
+class __$SearchDataCopyWithImpl<$Res> extends _$SearchDataCopyWithImpl<$Res>
+    implements _$SearchDataCopyWith<$Res> {
+  __$SearchDataCopyWithImpl(
+      _SearchData _value, $Res Function(_SearchData) _then)
+      : super(_value, (v) => _then(v as _SearchData));
+
+  @override
+  _SearchData get _value => super._value as _SearchData;
+
+  @override
+  $Res call({
+    Object searchData = freezed,
+  }) {
+    return _then(_SearchData(
+      searchData == freezed ? _value.searchData : searchData as List<dynamic>,
+    ));
+  }
+}
+
+class _$_SearchData with DiagnosticableTreeMixin implements _SearchData {
+  _$_SearchData(this.searchData) : assert(searchData != null);
+
+  @override
+  final List<dynamic> searchData;
+
+  bool _didtitle = false;
+  List<dynamic> _title;
+
+  @override
+  List<dynamic> get title {
+    if (_didtitle == false) {
+      _didtitle = true;
+      _title = searchData.map((e) => e['title']).toList();
+    }
+    return _title;
+  }
+
+  bool _didauthor = false;
+  List<dynamic> _author;
+
+  @override
+  List<dynamic> get author {
+    if (_didauthor == false) {
+      _didauthor = true;
+      _author = searchData.map((e) => e['author']).toList();
+    }
+    return _author;
+  }
+
+  bool _didpreview = false;
+  List<dynamic> _preview;
+
+  @override
+  List<dynamic> get preview {
+    if (_didpreview == false) {
+      _didpreview = true;
+      _preview = searchData.map((e) => e['preview']).toList();
+    }
+    return _preview;
+  }
+
+  bool _didpermalink = false;
+  List<dynamic> _permalink;
+
+  @override
+  List<dynamic> get permalink {
+    if (_didpermalink == false) {
+      _didpermalink = true;
+      _permalink = searchData.map((e) => e['permalink']).toList();
+    }
+    return _permalink;
+  }
+
+  bool _didimage = false;
+  List<dynamic> _image;
+
+  @override
+  List<dynamic> get image {
+    if (_didimage == false) {
+      _didimage = true;
+      _image = searchData.map((e) => e['image']).toList();
+    }
+    return _image;
+  }
+
+  bool _didups = false;
+  List<dynamic> _ups;
+
+  @override
+  List<dynamic> get ups {
+    if (_didups == false) {
+      _didups = true;
+      _ups = searchData.map((e) => e['ups']).toList();
+    }
+    return _ups;
+  }
+
+  bool _didcreatedUtc = false;
+  List<dynamic> _createdUtc;
+
+  @override
+  List<dynamic> get createdUtc {
+    if (_didcreatedUtc == false) {
+      _didcreatedUtc = true;
+      _createdUtc = searchData.map((e) => e['created_utc']).toList();
+    }
+    return _createdUtc;
+  }
+
+  bool _didurl = false;
+  List<dynamic> _url;
+
+  @override
+  List<dynamic> get url {
+    if (_didurl == false) {
+      _didurl = true;
+      _url = searchData.map((e) => e['image']).toList();
+    }
+    return _url;
+  }
+
+  bool _didimagebytes = false;
+  List<dynamic> _imagebytes;
+
+  @override
+  List<dynamic> get imagebytes {
+    if (_didimagebytes == false) {
+      _didimagebytes = true;
+      _imagebytes = searchData.map((e) => e['imagebytes']).toList();
+    }
+    return _imagebytes;
+  }
+
+  bool _didimagewidth = false;
+  List<dynamic> _imagewidth;
+
+  @override
+  List<dynamic> get imagewidth {
+    if (_didimagewidth == false) {
+      _didimagewidth = true;
+      _imagewidth = searchData.map((e) => e['imagesize'][0]).toList();
+    }
+    return _imagewidth;
+  }
+
+  bool _didimageheight = false;
+  List<dynamic> _imageheight;
+
+  @override
+  List<dynamic> get imageheight {
+    if (_didimageheight == false) {
+      _didimageheight = true;
+      _imageheight = searchData.map((e) => e['imagesize'][1]).toList();
+    }
+    return _imageheight;
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'SearchData(searchData: $searchData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'SearchData'))
+      ..add(DiagnosticsProperty('searchData', searchData))
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('author', author))
+      ..add(DiagnosticsProperty('preview', preview))
+      ..add(DiagnosticsProperty('permalink', permalink))
+      ..add(DiagnosticsProperty('image', image))
+      ..add(DiagnosticsProperty('ups', ups))
+      ..add(DiagnosticsProperty('createdUtc', createdUtc))
+      ..add(DiagnosticsProperty('url', url))
+      ..add(DiagnosticsProperty('imagebytes', imagebytes))
+      ..add(DiagnosticsProperty('imagewidth', imagewidth))
+      ..add(DiagnosticsProperty('imageheight', imageheight));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _SearchData &&
+            (identical(other.searchData, searchData) ||
+                const DeepCollectionEquality()
+                    .equals(other.searchData, searchData)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(searchData);
+
+  @override
+  _$SearchDataCopyWith<_SearchData> get copyWith =>
+      __$SearchDataCopyWithImpl<_SearchData>(this, _$identity);
+}
+
+abstract class _SearchData implements SearchData {
+  factory _SearchData(List<dynamic> searchData) = _$_SearchData;
+
+  @override
+  List<dynamic> get searchData;
+  @override
+  _$SearchDataCopyWith<_SearchData> get copyWith;
+}

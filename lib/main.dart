@@ -3,16 +3,17 @@ import 'package:device_preview/device_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
-import 'package:wallpaper/helper/list_s.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/router/router.gr.dart';
 import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
+import 'package:wallpaper/widget/appbar.dart';
 import 'package:wallpaper/widget/hometext.dart';
+import 'package:wallpaper/widget/searchField.dart';
+import 'package:wallpaper/widget/searchwallpaper.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
 
 void main() {
@@ -48,7 +49,8 @@ class MainScreenPage extends StatefulWidget {
   _MainScreenPageState createState() => _MainScreenPageState();
 }
 
-class _MainScreenPageState extends State<MainScreenPage> {
+class _MainScreenPageState extends State<MainScreenPage>
+    with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
 
   @override
@@ -63,6 +65,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
       return Provider.of<AmoledFirebase>(context, listen: false)
           .addWallpaper(value.value);
     });
+    Provider.of<AmoledFirebase>(context,listen: false).updatesearchIcon(true);
     // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     // firebaseInstance.goOnline();
@@ -76,132 +79,73 @@ class _MainScreenPageState extends State<MainScreenPage> {
   @override
   Widget build(BuildContext context) {
     // print(scrollController.offset / 2 / 12);
+    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
 
-    return Scaffold(
-      backgroundColor: darkslategrayhs,
-      drawer: Container(
-          color: darkslategrayhs,
-          width: 210,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              canvasColor:
-                  darkslategrayhs, //or any other color you want. e.g Colors.blue.withOpacity(0.5)
+    return AppBars(
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            AnimatedOpacity(
+              curve: Curves.easeIn,
+              onEnd: () {
+                if (!amoledFirebase.searchField)
+                  setState(() {
+                    amoledFirebase.updatevisibilty(false);
+                  });
+              },
+              opacity: amoledFirebase.searchField ? 1.0 : 0.0,
+              duration: Duration(seconds: 1),
+              child: Visibility(
+                visible: amoledFirebase.isVisible,
+                child: SearchField(),
+              ),
             ),
-            child: Drawer(
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 150,
-                  ),
-                  Expanded(
-                      child: ListView(
-                          children: sl
-                              .get<ListCollection>()
-                              .draw
-                              .map((e) => Material(
-                                    color: Colors.transparent,
-                                    child: InkWell(
-                                      onTap: () {
-                                        switch (e) {
-                                          case "Home":
-                                            Navigator.of(context).pop();
-                                            break;
-                                          case "Download":
-                                            ExtendedNavigator.rootNavigator
-                                                .pushNamed(Routes.downloadPage);
-                                            break;
-                                          case "Privacy Policy":
-                                            Navigator.of(context).pop();
-                                            break;
-                                          case "Contact Us":
-                                            Navigator.of(context).pop();
-                                            break;
+            Expanded(
+              child: ListView(
+                children: [
+                  // HomeText(
+                  //   text: "Categories",
+                  // ),
+                  // Category(),
 
-                                          default:
-                                        }
-                                      },
-                                      child: ListTile(
-                                        leading: Text("").iconchange(e),
-                                        title: Text(
-                                          e,
-                                          style: TextStyle(
-                                              color: gainsborohs,
-                                              fontSize: 15,
-                                              fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                    ),
-                                  ))
-                              .toList())),
+                  HomeText(
+                    text: "Trending",
+                  ),
+                  FutureBuilder<DataSnapshot>(
+                      future: FirebaseDatabase.instance
+                          .reference()
+                          .child("newwallpaper/new")
+                          .once(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<dynamic> snapshot) {
+                        if (!snapshot.hasData) {
+                          return Center(child: CircularProgressIndicator());
+                        }
+
+                        if (amoledFirebase.searchdbtext == "") {
+                          return WallpaperList();
+                        } else if (amoledFirebase.searchdb.isNotEmpty) {
+                          return SearchWallpaper();
+                        } else {
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(2, 40, 2, 2),
+                                child: Text(
+                                  'No Result Found With This Keyword "${amoledFirebase.searchdbtext}"',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.rancho(
+                                      color: gainsborohs, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      })
                 ],
               ),
             ),
-          )),
-      appBar: PreferredSize(
-          child: Builder(
-            builder: (BuildContext context) => AppBar(
-                elevation: 0,
-                backgroundColor: darkslategrayhs,
-                centerTitle: true,
-                automaticallyImplyLeading: false,
-                actions: [
-                  InkWell(
-                    borderRadius: BorderRadius.circular(100),
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        "assets/svg/iconsmenu3.png",
-                        width: 30,
-                        height: 35,
-                      ),
-                    ),
-                  )
-                ],
-                leading: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: InkWell(
-                    // borderRadius: BorderRadius.circular(100),
-                    onTap: () {
-                      return Scaffold.of(context).openDrawer();
-                    },
-                    child: Image.asset(
-                      "assets/svg/iconsmenu2.png",
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
-                ),
-                title: Image.asset(
-                  "assets/svg/icons.png",
-                )),
-          ),
-          preferredSize: Size(50, 55)),
-      body: SafeArea(
-        child: ListView(
-          children: [
-            // HomeText(
-            //   text: "Categories",
-            // ),
-            // Category(),
-            HomeText(
-              text: "Trending",
-            ),
-            FutureBuilder<DataSnapshot>(
-                future: FirebaseDatabase.instance
-                    .reference()
-                    .child("newwallpaper/new")
-                    .once(),
-                builder:
-                    (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (!snapshot.hasData) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-
-                  return WallpaperList(
-                    dataSnapshot: snapshot.data,
-                  );
-                })
           ],
         ),
       ),

@@ -64,3 +64,40 @@ void crud(
           FirebaseDatabase.instance.reference().child("$child$index").remove(),
       orElse: () => print('No such operation'));
 }
+
+@freezed
+abstract class SearchData with _$SearchData {
+  factory SearchData(List<dynamic> searchData) = _SearchData;
+
+  @late
+  List<dynamic> get title => searchData.map((e) => e['title']).toList();
+
+  @late
+  List<dynamic> get author => searchData.map((e) => e['author']).toList();
+  @late
+  List<dynamic> get preview => searchData.map((e) => e['preview']).toList();
+  @late
+  List<dynamic> get permalink =>
+      searchData.map((e) => e['permalink']).toList();
+  @late
+  List<dynamic> get image => searchData.map((e) => e['image']).toList();
+  @late
+  List<dynamic> get ups => searchData.map((e) => e['ups']).toList();
+  @late
+  List<dynamic> get createdUtc =>
+      searchData.map((e) => e['created_utc']).toList();
+  // @late
+  // List<dynamic> get wallpaper =>
+  //     searchData.map((e) => e['wallpaper']).toList();
+  @late
+  List<dynamic> get url => searchData.map((e) => e['image']).toList();
+  @late
+  List<dynamic> get imagebytes =>
+      searchData.map((e) => e['imagebytes']).toList();
+  @late
+  List<dynamic> get imagewidth =>
+      searchData.map((e) => e['imagesize'][0]).toList();
+  @late
+  List<dynamic> get imageheight =>
+      searchData.map((e) => e['imagesize'][1]).toList();
+}

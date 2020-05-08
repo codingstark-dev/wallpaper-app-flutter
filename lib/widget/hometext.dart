@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:wallpaper/helper/color.dart';
 
 class HomeText extends StatelessWidget {
   const HomeText({Key key, @required this.text}) : super(key: key);
@@ -9,10 +11,10 @@ class HomeText extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(13.0),
         child: Text(text,
-            style: TextStyle(
-                fontFamily: 'googlefont',
-                fontSize: 20,letterSpacing: 2,
-                color: Color(0xffd4d9e3),
+            style: GoogleFonts.pacifico(
+                fontSize: 20,
+                letterSpacing: 2,
+                color: gainsborohs,
                 fontWeight: FontWeight.bold)),
       ),
     );

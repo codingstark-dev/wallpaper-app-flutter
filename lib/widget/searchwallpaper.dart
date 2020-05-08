@@ -14,21 +14,17 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:extended_image/extended_image.dart';
 import 'package:wallpaper/service/locator.dart';
 
-class WallpaperList extends StatefulWidget {
-  const WallpaperList({
-    Key key,
-  }) : super(key: key);
-
-  // final DataSnapshot dataSnapshot;
+class SearchWallpaper extends StatefulWidget {
+  SearchWallpaper({Key key}) : super(key: key);
 
   @override
-  _WallpaperListState createState() => _WallpaperListState();
+  _SearchWallpaperState createState() => _SearchWallpaperState();
 }
 
-class _WallpaperListState extends State<WallpaperList> {
+class _SearchWallpaperState extends State<SearchWallpaper> {
   @override
   Widget build(BuildContext context) {
-    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+     AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: GridView.builder(
@@ -41,13 +37,13 @@ class _WallpaperListState extends State<WallpaperList> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: amoledFirebase.wallpaper.preview.length
+        itemCount: amoledFirebase.searchData.preview.length
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,
         itemBuilder: (BuildContext context, int index) {
           var date = new DateTime.fromMillisecondsSinceEpoch(double.parse(
-                      amoledFirebase.wallpaper.createdUtc[index].toString())
+                      amoledFirebase.searchData.createdUtc[index].toString())
                   .floor() *
               1000);
           return Padding(
@@ -66,7 +62,7 @@ class _WallpaperListState extends State<WallpaperList> {
                           child: InkWell(
                             splashColor: Colors.red,
                             onTap: () {
-                              List lol = amoledFirebase.wallpaper.url[index]
+                              List lol = amoledFirebase.searchData.url[index]
                                   .toString()
                                   .split(".");
                               // print(lol);
@@ -79,16 +75,16 @@ class _WallpaperListState extends State<WallpaperList> {
                                   arguments: WallpaperDetailArguments(
                                       imageextenstion: lol[3],
                                       imagebytes: filesize(amoledFirebase
-                                          .wallpaper.imagebytes[index]
+                                          .searchData.imagebytes[index]
                                           .toString()),
                                       index: index,
-                                      url: amoledFirebase.wallpaper.url[index],
+                                      url: amoledFirebase.searchData.url[index],
                                       title: amoledFirebase
-                                          .wallpaper.title[index]
+                                          .searchData.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       author: amoledFirebase
-                                          .wallpaper.author[index],
+                                          .searchData.author[index],
                                       ups: amoledFirebase.wallpaper.ups[index],
                                       date: timeago.format(date).toString(),
                                       sizeofimage:
@@ -125,7 +121,7 @@ class _WallpaperListState extends State<WallpaperList> {
                               height: 400,
                               width: 250,
                               child: ExtendedImage.network(
-                                amoledFirebase.wallpaper.preview[index],
+                                amoledFirebase.searchData.preview[index],
                                 fit: BoxFit.cover, alignment: Alignment.center,
                                 enableLoadState: true,
                                 handleLoadingProgress: true,
@@ -167,9 +163,9 @@ class _WallpaperListState extends State<WallpaperList> {
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
                                 child: Text(
-                                    "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                    "${amoledFirebase.searchData.imagewidth[index]} " +
                                         "x " +
-                                        "${amoledFirebase.wallpaper.imageheight[index]}",
+                                        "${amoledFirebase.searchData.imageheight[index]}",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         fontSize: 9,
@@ -219,7 +215,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                           width: 1, color: gainsborohs)),
                                   child: Text(
                                       filesize(amoledFirebase
-                                          .wallpaper.imagebytes[index]
+                                          .searchData.imagebytes[index]
                                           .toString()),
                                       textAlign: TextAlign.left,
                                       style: TextStyle(
@@ -251,7 +247,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                       width: 5,
                                     ),
                                     Text(
-                                      amoledFirebase.wallpaper.ups[index]
+                                      amoledFirebase.searchData.ups[index]
                                           .toString(),
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
@@ -277,7 +273,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                      amoledFirebase.wallpaper.title[index]
+                                      amoledFirebase.searchData.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       style: TextStyle(
@@ -384,7 +380,7 @@ class _WallpaperListState extends State<WallpaperList> {
                     Align(
                       alignment: Alignment.topLeft,
                       child: Text(
-                        "By ${amoledFirebase.wallpaper.author[index]}",
+                        "By ${amoledFirebase.searchData.author[index]}",
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
