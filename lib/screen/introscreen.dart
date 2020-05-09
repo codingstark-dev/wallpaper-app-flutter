@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:intro_views_flutter/Models/page_view_model.dart';
 import 'package:intro_views_flutter/intro_views_flutter.dart';
 import 'package:wallpaper/helper/color.dart';
@@ -11,25 +12,25 @@ class IntroScreen extends StatelessWidget {
     final pages = [
       PageViewModel(
           pageColor: gainsborohs,
-          // iconImageAssetPath: 'assets/air-hostess.png',
-          bubble: Image.asset('assets/air-hostess.png'),
+          iconImageAssetPath:  'assets/svg/clock.png',
+          bubble: Image.asset( 'assets/svg/clock.png'),
           body: Text(
-            'Haselfree  booking  of  flight  tickets  with  full  refund  on  cancelation',
+            'We Update WallPaper Regularly, With Original Image And Quality',
           ),
           title: Text(
-            'Flights',
+            'Wallpaper',
           ),
-          titleTextStyle: TextStyle(fontFamily: 'MyFont', color: Colors.white),
-          bodyTextStyle: TextStyle(fontFamily: 'MyFont', color: Colors.white),
+          titleTextStyle: GoogleFonts.pacifico( color:darkslategrayhs,fontSize: 30),
+          bodyTextStyle: GoogleFonts.pacifico( color: darkslategrayhs),
           mainImage: Image.asset(
-            'assets/airplane.png',
-            height: 285.0,
-            width: 285.0,
+            'assets/svg/clock.png',
+            height: 200.0,
+            width: 200.0,
             alignment: Alignment.center,
           )),
       PageViewModel(
         pageColor: darkslategrayhs,
-        iconImageAssetPath: 'assets/waiter.png',
+        iconImageAssetPath: 'assets/svg/clock.png',
         body: Text(
           'We  work  for  the  comfort ,  enjoy  your  stay  at  our  beautiful  hotels',
         ),
