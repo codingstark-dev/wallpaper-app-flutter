@@ -12,11 +12,14 @@ import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
 import 'package:wallpaper/widget/appbar.dart';
 import 'package:wallpaper/widget/hometext.dart';
+import 'package:wallpaper/widget/latestwallpaper.dart';
 import 'package:wallpaper/widget/searchField.dart';
 import 'package:wallpaper/widget/searchwallpaper.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+
   try {
     serviceLocator();
   } catch (e) {
@@ -35,8 +38,8 @@ void main() {
           router: Router(),
         ),
       ),
-      // initialRoute: Routes.mainScreenPage,
-      // onGenerateRoute: Router().onGenerateRoute,
+      initialRoute: Routes.mainScreenPage,
+      onGenerateRoute: Router().onGenerateRoute,
       debugShowCheckedModeBanner: false,
     ),
   ));
@@ -52,20 +55,30 @@ class MainScreenPage extends StatefulWidget {
 class _MainScreenPageState extends State<MainScreenPage>
     with TickerProviderStateMixin {
   final ScrollController scrollController = ScrollController();
-
+  bool loading = false;
   @override
   void initState() {
     super.initState();
     sl.get<WallpaperFun>().checkPermission();
+
+    FirebaseDatabase.instance
+        .reference()
+        .child("newwallpaper/hot")
+        .once()
+        .then((value) {
+      return Provider.of<AmoledFirebase>(context, listen: false)
+          .addWallpaper(value.value);
+    }).whenComplete(() => loading = true);
+
     FirebaseDatabase.instance
         .reference()
         .child("newwallpaper/new")
         .once()
         .then((value) {
       return Provider.of<AmoledFirebase>(context, listen: false)
-          .addWallpaper(value.value);
+          .addLatestWallpaper(value.value);
     });
-    Provider.of<AmoledFirebase>(context,listen: false).updatesearchIcon(true);
+    Provider.of<AmoledFirebase>(context, listen: false).updatesearchIcon(true);
     // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     // firebaseInstance.goOnline();
@@ -109,19 +122,15 @@ class _MainScreenPageState extends State<MainScreenPage>
                   // Category(),
 
                   HomeText(
-                    text: "Trending",
+                    text: amoledFirebase.trending ? "Trending" : "Latest",
                   ),
-                  FutureBuilder<DataSnapshot>(
-                      future: FirebaseDatabase.instance
-                          .reference()
-                          .child("newwallpaper/new")
-                          .once(),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (!snapshot.hasData) {
-                          return Center(child: CircularProgressIndicator());
-                        }
-
+                  Builder(
+                    builder: (BuildContext context) {
+                      if (!loading)
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      if (amoledFirebase.trending) {
                         if (amoledFirebase.searchdbtext == "") {
                           return WallpaperList();
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
@@ -142,7 +151,30 @@ class _MainScreenPageState extends State<MainScreenPage>
                             ),
                           );
                         }
-                      })
+                      } else {
+                        if (amoledFirebase.searchdbtext == "") {
+                          return LatestWallpapers();
+                        } else if (amoledFirebase.searchdb.isNotEmpty) {
+                          return SearchWallpaper();
+                        } else {
+                          return Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(2, 40, 2, 2),
+                                child: Text(
+                                  'No Result Found With This Keyword "${amoledFirebase.searchdbtext}"',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.rancho(
+                                      color: gainsborohs, fontSize: 20),
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                    },
+                  )
                 ],
               ),
             ),

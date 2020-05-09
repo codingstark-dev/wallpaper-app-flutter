@@ -16,7 +16,6 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     textEditingController.clear();
   }
@@ -33,20 +32,38 @@ class _SearchFieldState extends State<SearchField> {
         child: TextField(
             controller: textEditingController,
             onChanged: (value) {
-              var data = amoledFirebase.firebasedb
-                  .where((element) =>
-                      element['title'].toString().toLowerCase().contains(value))
-                  .toList();
-              setState(() {
-                amoledFirebase.searchdb.clear();
-                amoledFirebase.addsearch(data);
-                amoledFirebase.addStringSearchdb(value);
-                print(amoledFirebase.searchData.title);
-              });
+              if (amoledFirebase.trending) {
+                var data = amoledFirebase.firebasedb
+                    .where((element) => element['title']
+                        .toString()
+                        .toLowerCase()
+                        .contains(value))
+                    .toList();
+                setState(() {
+                  amoledFirebase.searchdb.clear();
+                  amoledFirebase.addsearch(data);
+                  amoledFirebase.addStringSearchdb(value);
+                });
+              } else {
+                var data = amoledFirebase.latestWallpaperdb
+                    .where((element) => element['title']
+                        .toString()
+                        .toLowerCase()
+                        .contains(value))
+                    .toList();
+                setState(() {
+                  amoledFirebase.searchdb.clear();
+                  amoledFirebase.addsearch(data);
+                  amoledFirebase.addStringSearchdb(value);
+                });
+              }
             },
             style: TextStyle(color: gainsborohs),
             cursorColor: gainsborohs,
-            decoration: InputDecoration(hintText: "Search Wallpaper..",hintStyle: TextStyle(color: gainsborohs,fontWeight: FontWeight.w400),
+            decoration: InputDecoration(
+                hintText: "Search Wallpaper..",
+                hintStyle:
+                    TextStyle(color: gainsborohs, fontWeight: FontWeight.w400),
                 suffixIcon: IconButton(
                   color: gainsborohs,
                   icon: (amoledFirebase.searchdbtext == "")

@@ -6,6 +6,7 @@ import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
 GetIt sl = GetIt.instance;
 
 void serviceLocator() async {
+
   sl.registerLazySingleton(() => AmoledFirebase());
   sl.registerLazySingleton(() => ListCollection());
   sl.registerLazySingleton(() => WallpaperFun());

@@ -938,3 +938,274 @@ abstract class _SearchData implements SearchData {
   @override
   _$SearchDataCopyWith<_SearchData> get copyWith;
 }
+
+class _$LatestWallpaperTearOff {
+  const _$LatestWallpaperTearOff();
+
+  _LatestWallpaper call(List<dynamic> latestwallpaperData) {
+    return _LatestWallpaper(
+      latestwallpaperData,
+    );
+  }
+}
+
+// ignore: unused_element
+const $LatestWallpaper = _$LatestWallpaperTearOff();
+
+mixin _$LatestWallpaper {
+  List<dynamic> get latestwallpaperData;
+
+  $LatestWallpaperCopyWith<LatestWallpaper> get copyWith;
+}
+
+abstract class $LatestWallpaperCopyWith<$Res> {
+  factory $LatestWallpaperCopyWith(
+          LatestWallpaper value, $Res Function(LatestWallpaper) then) =
+      _$LatestWallpaperCopyWithImpl<$Res>;
+  $Res call({List<dynamic> latestwallpaperData});
+}
+
+class _$LatestWallpaperCopyWithImpl<$Res>
+    implements $LatestWallpaperCopyWith<$Res> {
+  _$LatestWallpaperCopyWithImpl(this._value, this._then);
+
+  final LatestWallpaper _value;
+  // ignore: unused_field
+  final $Res Function(LatestWallpaper) _then;
+
+  @override
+  $Res call({
+    Object latestwallpaperData = freezed,
+  }) {
+    return _then(_value.copyWith(
+      latestwallpaperData: latestwallpaperData == freezed
+          ? _value.latestwallpaperData
+          : latestwallpaperData as List<dynamic>,
+    ));
+  }
+}
+
+abstract class _$LatestWallpaperCopyWith<$Res>
+    implements $LatestWallpaperCopyWith<$Res> {
+  factory _$LatestWallpaperCopyWith(
+          _LatestWallpaper value, $Res Function(_LatestWallpaper) then) =
+      __$LatestWallpaperCopyWithImpl<$Res>;
+  @override
+  $Res call({List<dynamic> latestwallpaperData});
+}
+
+class __$LatestWallpaperCopyWithImpl<$Res>
+    extends _$LatestWallpaperCopyWithImpl<$Res>
+    implements _$LatestWallpaperCopyWith<$Res> {
+  __$LatestWallpaperCopyWithImpl(
+      _LatestWallpaper _value, $Res Function(_LatestWallpaper) _then)
+      : super(_value, (v) => _then(v as _LatestWallpaper));
+
+  @override
+  _LatestWallpaper get _value => super._value as _LatestWallpaper;
+
+  @override
+  $Res call({
+    Object latestwallpaperData = freezed,
+  }) {
+    return _then(_LatestWallpaper(
+      latestwallpaperData == freezed
+          ? _value.latestwallpaperData
+          : latestwallpaperData as List<dynamic>,
+    ));
+  }
+}
+
+class _$_LatestWallpaper
+    with DiagnosticableTreeMixin
+    implements _LatestWallpaper {
+  _$_LatestWallpaper(this.latestwallpaperData)
+      : assert(latestwallpaperData != null);
+
+  @override
+  final List<dynamic> latestwallpaperData;
+
+  bool _didtitle = false;
+  List<dynamic> _title;
+
+  @override
+  List<dynamic> get title {
+    if (_didtitle == false) {
+      _didtitle = true;
+      _title = latestwallpaperData.map((e) => e['title']).toList();
+    }
+    return _title;
+  }
+
+  bool _didauthor = false;
+  List<dynamic> _author;
+
+  @override
+  List<dynamic> get author {
+    if (_didauthor == false) {
+      _didauthor = true;
+      _author = latestwallpaperData.map((e) => e['author']).toList();
+    }
+    return _author;
+  }
+
+  bool _didpreview = false;
+  List<dynamic> _preview;
+
+  @override
+  List<dynamic> get preview {
+    if (_didpreview == false) {
+      _didpreview = true;
+      _preview = latestwallpaperData.map((e) => e['preview']).toList();
+    }
+    return _preview;
+  }
+
+  bool _didpermalink = false;
+  List<dynamic> _permalink;
+
+  @override
+  List<dynamic> get permalink {
+    if (_didpermalink == false) {
+      _didpermalink = true;
+      _permalink = latestwallpaperData.map((e) => e['permalink']).toList();
+    }
+    return _permalink;
+  }
+
+  bool _didimage = false;
+  List<dynamic> _image;
+
+  @override
+  List<dynamic> get image {
+    if (_didimage == false) {
+      _didimage = true;
+      _image = latestwallpaperData.map((e) => e['image']).toList();
+    }
+    return _image;
+  }
+
+  bool _didups = false;
+  List<dynamic> _ups;
+
+  @override
+  List<dynamic> get ups {
+    if (_didups == false) {
+      _didups = true;
+      _ups = latestwallpaperData.map((e) => e['ups']).toList();
+    }
+    return _ups;
+  }
+
+  bool _didcreatedUtc = false;
+  List<dynamic> _createdUtc;
+
+  @override
+  List<dynamic> get createdUtc {
+    if (_didcreatedUtc == false) {
+      _didcreatedUtc = true;
+      _createdUtc = latestwallpaperData.map((e) => e['created_utc']).toList();
+    }
+    return _createdUtc;
+  }
+
+  bool _didurl = false;
+  List<dynamic> _url;
+
+  @override
+  List<dynamic> get url {
+    if (_didurl == false) {
+      _didurl = true;
+      _url = latestwallpaperData.map((e) => e['image']).toList();
+    }
+    return _url;
+  }
+
+  bool _didimagebytes = false;
+  List<dynamic> _imagebytes;
+
+  @override
+  List<dynamic> get imagebytes {
+    if (_didimagebytes == false) {
+      _didimagebytes = true;
+      _imagebytes = latestwallpaperData.map((e) => e['imagebytes']).toList();
+    }
+    return _imagebytes;
+  }
+
+  bool _didimagewidth = false;
+  List<dynamic> _imagewidth;
+
+  @override
+  List<dynamic> get imagewidth {
+    if (_didimagewidth == false) {
+      _didimagewidth = true;
+      _imagewidth = latestwallpaperData.map((e) => e['imagesize'][0]).toList();
+    }
+    return _imagewidth;
+  }
+
+  bool _didimageheight = false;
+  List<dynamic> _imageheight;
+
+  @override
+  List<dynamic> get imageheight {
+    if (_didimageheight == false) {
+      _didimageheight = true;
+      _imageheight = latestwallpaperData.map((e) => e['imagesize'][1]).toList();
+    }
+    return _imageheight;
+  }
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'LatestWallpaper(latestwallpaperData: $latestwallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'LatestWallpaper'))
+      ..add(DiagnosticsProperty('latestwallpaperData', latestwallpaperData))
+      ..add(DiagnosticsProperty('title', title))
+      ..add(DiagnosticsProperty('author', author))
+      ..add(DiagnosticsProperty('preview', preview))
+      ..add(DiagnosticsProperty('permalink', permalink))
+      ..add(DiagnosticsProperty('image', image))
+      ..add(DiagnosticsProperty('ups', ups))
+      ..add(DiagnosticsProperty('createdUtc', createdUtc))
+      ..add(DiagnosticsProperty('url', url))
+      ..add(DiagnosticsProperty('imagebytes', imagebytes))
+      ..add(DiagnosticsProperty('imagewidth', imagewidth))
+      ..add(DiagnosticsProperty('imageheight', imageheight));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is _LatestWallpaper &&
+            (identical(other.latestwallpaperData, latestwallpaperData) ||
+                const DeepCollectionEquality()
+                    .equals(other.latestwallpaperData, latestwallpaperData)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(latestwallpaperData);
+
+  @override
+  _$LatestWallpaperCopyWith<_LatestWallpaper> get copyWith =>
+      __$LatestWallpaperCopyWithImpl<_LatestWallpaper>(this, _$identity);
+}
+
+abstract class _LatestWallpaper implements LatestWallpaper {
+  factory _LatestWallpaper(List<dynamic> latestwallpaperData) =
+      _$_LatestWallpaper;
+
+  @override
+  List<dynamic> get latestwallpaperData;
+  @override
+  _$LatestWallpaperCopyWith<_LatestWallpaper> get copyWith;
+}

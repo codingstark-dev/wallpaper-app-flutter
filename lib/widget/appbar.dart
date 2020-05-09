@@ -35,9 +35,10 @@ class _AppBarsState extends State<AppBars> {
                     height: 40,
                   ),
                   SizedBox(
-                    height: 130,
+                    height: 150,
                     child: Image.asset(
                       "assets/svg/fox1.png",
+                      fit: BoxFit.cover,
                     ),
                   ),
                   Expanded(
@@ -51,13 +52,17 @@ class _AppBarsState extends State<AppBars> {
                                       onTap: () {
                                         switch (e) {
                                           case "Home":
-                                            Navigator.of(context).pop();
+                                         
+                                            ExtendedNavigator.rootNavigator
+                                                .pushReplacementNamed(
+                                                    Routes.mainScreenPage);
                                             break;
                                           case "Download":
                                             ExtendedNavigator.rootNavigator
                                                 .pushNamed(Routes.downloadPage);
                                             amoledFirebase
                                                 .updatesearchIcon(false);
+
                                             break;
                                           case "Privacy Policy":
                                             Navigator.of(context).pop();
@@ -94,33 +99,36 @@ class _AppBarsState extends State<AppBars> {
                 centerTitle: true,
                 automaticallyImplyLeading: false,
                 actions: [
-                  Visibility(visible: amoledFirebase.searchIcon,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(100),
-                      onTap: () {
-                        (amoledFirebase.searchField == true)
-                            ? amoledFirebase.updatesearch(false)
-                            : amoledFirebase.updatesearch(true);
-                        amoledFirebase.updatevisibilty(true);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: (amoledFirebase.searchField == false)
-                            ? Image.asset(
-                                "assets/svg/iconsmenu3.png",
-                                width: 30,
-                                height: 35,
-                              )
-                            : Padding(
-                                padding: const EdgeInsets.all(5.0),
-                                child: Icon(
-                                  Icons.cancel,
-                                  color: gainsborohs,
-                                ),
-                              ),
-                      ),
-                    ),
-                  )
+                  (amoledFirebase.searchIcon == true)
+                      ? InkWell(
+                          borderRadius: BorderRadius.circular(100),
+                          onTap: () {
+                            (amoledFirebase.searchField == true)
+                                ? amoledFirebase.updatesearch(false)
+                                : amoledFirebase.updatesearch(true);
+                            amoledFirebase.updatevisibilty(true);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: (amoledFirebase.searchField == false)
+                                ? Image.asset(
+                                    "assets/svg/iconsmenu3.png",
+                                    width: 30,
+                                    height: 35,
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: Icon(
+                                      Icons.cancel,
+                                      color: gainsborohs,
+                                    ),
+                                  ),
+                          ),
+                        )
+                      : SizedBox(
+                          width: 32,
+                          height: 35,
+                        )
                 ],
                 leading: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -137,7 +145,7 @@ class _AppBarsState extends State<AppBars> {
                   ),
                 ),
                 title: Image.asset(
-                  "assets/svg/icons.png",
+                  "assets/svg/icons.png", height: 50,
                 )),
           ),
           preferredSize: Size(50, 55)),

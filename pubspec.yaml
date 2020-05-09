@@ -34,7 +34,8 @@ dependencies:
   freezed_annotation:
   json_serializable: ^3.3.0
   path:
-  # fab_circular_menu: ^1.0.0
+  shared_preferences: ^0.5.7+1
+  intro_views_flutter: ^2.8.1
   flutter_spinkit: "^4.1.2"
   timeago: ^2.0.26
   filesize: ^1.0.4
@@ -42,7 +43,6 @@ dependencies:
   permission_handler: ^5.0.0+hotfix.4
   get_it: ^4.0.2
   device_preview: ^0.4.4
-  rxdart: ^0.24.0
   auto_route: ^0.4.5
   google_fonts: ^1.0.0
 

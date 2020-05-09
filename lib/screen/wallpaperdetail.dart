@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
-import 'package:rxdart/rxdart.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/provider/firebasedata.dart';
 import 'package:wallpaper/service/locator.dart';
@@ -45,7 +44,7 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
   bool detailbox = true;
   bool loadingBool = false;
   bool status = false;
-  StreamController streamController = BehaviorSubject();
+  StreamController streamController = StreamController();
 
   @override
   void dispose() {
@@ -198,24 +197,33 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                       Positioned.fill(
                           child: Material(
                         color: darkslategrayhs,
-                        child: ExtendedImage.network(
-                          widget.url,
-                          headers: {
-                            "User-Agent":
-                                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
-                          },
-                          filterQuality: FilterQuality.high, retries: 30,
-                          enableSlideOutPage: true,
-                          // enableMemoryCache: true,
-                          handleLoadingProgress: true,
-                          cache: false,
-                          fit: BoxFit.cover,
-                          enableLoadState: true,
-                          loadStateChanged: (state) {
-                            streamController.add(state.extendedImageLoadState);
-
-                            // print(
-                            //     state.extendedImageLoadState == LoadState.completed);
+                        child: ExtendedImage.network(widget.url,
+                            headers: {
+                              "User-Agent":
+                                  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
+                            },
+                            filterQuality: FilterQuality.high,
+                            retries: 30,timeLimit: Duration(seconds: 30),
+                            enableSlideOutPage: true,
+                            // enableMemoryCache: true,
+                            handleLoadingProgress: true,
+                            cache: false,
+                            fit: BoxFit.cover,
+                            enableLoadState: true, loadStateChanged: (state) {
+                          streamController.add(state.extendedImageLoadState);
+                          // print(state.extendedImageLoadState);
+                          // print(
+                          //     state.extendedImageLoadState == LoadState.completed);
+                          if (state.extendedImageLoadState ==
+                              LoadState.failed) {
+                            return Center(
+                              child: Container(
+                                  child: Text(
+                                "Failed To Load Image, Check Your Internet Connection",
+                                style: TextStyle(color: gainsborohs,fontWeight: FontWeight.bold,)
+                              )),
+                            );
+                          } else {
                             if (state.loadingProgress?.expectedTotalBytes ==
                                 null) return null;
 
@@ -265,8 +273,8 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                 ],
                               ),
                             );
-                          },
-                        ),
+                          }
+                        }),
                       ))
 
                       // Positioned.fill(

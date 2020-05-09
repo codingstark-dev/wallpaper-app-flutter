@@ -7,12 +7,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
+import 'package:wallpaper/wrapper/wrapper.dart';
 import 'package:wallpaper/main.dart';
 import 'package:wallpaper/screen/wallpaperdetail.dart';
 import 'package:wallpaper/screen/download.dart';
 
 abstract class Routes {
-  static const mainScreenPage = '/';
+  static const wrapper = '/';
+  static const mainScreenPage = '/main-screen-page';
   static const wallpaperDetail = '/wallpaper-detail';
   static const downloadPage = '/download-page';
 }
@@ -27,6 +29,15 @@ class Router extends RouterBase {
   Route<dynamic> onGenerateRoute(RouteSettings settings) {
     final args = settings.arguments;
     switch (settings.name) {
+      case Routes.wrapper:
+        if (hasInvalidArgs<WrapperArguments>(args)) {
+          return misTypedArgsRoute<WrapperArguments>(args);
+        }
+        final typedArgs = args as WrapperArguments ?? WrapperArguments();
+        return CupertinoPageRoute<dynamic>(
+          builder: (context) => Wrapper(key: typedArgs.key),
+          settings: settings,
+        );
       case Routes.mainScreenPage:
         if (hasInvalidArgs<MainScreenPageArguments>(args)) {
           return misTypedArgsRoute<MainScreenPageArguments>(args);
@@ -75,6 +86,12 @@ class Router extends RouterBase {
 //**************************************************************************
 // Arguments holder classes
 //***************************************************************************
+
+//Wrapper arguments holder class
+class WrapperArguments {
+  final Key key;
+  WrapperArguments({this.key});
+}
 
 //MainScreenPage arguments holder class
 class MainScreenPageArguments {

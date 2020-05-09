@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:wallpaper_manager/wallpaper_manager.dart';
 
 class WallpaperFun {
@@ -156,5 +157,17 @@ class WallpaperFun {
     }
     //Now you can use this directory for saving file, etc.
     //In case you are using external storage, make sure you have storage permissio
+  }
+
+  Future<bool> setVisitingBool() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return await preferences.setBool("Visited", true);
+  }
+
+  Future<bool> allreadyVisitingBool() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    bool data = preferences.getBool("Visited") ?? false;
+    return data;
   }
 }

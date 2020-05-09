@@ -11,7 +11,7 @@ reddit = praw.Reddit(client_id='W1XGqNQSKF2h4w',
                      client_secret='32CM4A9gSaIGVJFTwCHtKjWt7Xg', password='6b6WNmT*qZQ@qvx',
                      user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36', username='himanshu338')
 subreddit = reddit.subreddit('Amoledbackgrounds')
-hot_python = subreddit.new(limit=50)
+hot_python = subreddit.top(limit=50,time_filter='week')
 
 firebase = firebase.FirebaseApplication(
     'https://wallpaper-277ec.firebaseio.com/', None)
@@ -64,7 +64,7 @@ redditdatas()
 with open("sample.json", "w") as outfile:
     json.dump(listfile, outfile)
 
-firebase.put('/newwallpaper/', data=listfile, name="new",)
+firebase.put('/newwallpaper/', data=listfile, name="hot",)
 
 print("DONE")
 # r = requests.get(url)

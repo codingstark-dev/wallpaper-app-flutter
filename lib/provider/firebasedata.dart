@@ -5,14 +5,20 @@ import 'package:extended_image/extended_image.dart';
 class AmoledFirebase with ChangeNotifier {
   Wallpaper wallpaper;
   SearchData searchData;
+  LatestWallpaper latestWallpaper;
   List firebasedb = [];
+  List searchdb = [];
+  List latestWallpaperdb = [];
   bool searchField = false;
   bool status = false;
   LoadState loadingval;
   bool isVisible = false;
-  List searchdb = [];
+  String value1 = "Trending";
+
   String searchdbtext = "";
   bool searchIcon = true;
+  bool trending = true;
+
   addWallpaper(List data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] != null) {
@@ -22,6 +28,17 @@ class AmoledFirebase with ChangeNotifier {
     wallpaper = Wallpaper(firebasedb);
     notifyListeners();
     return wallpaper;
+  }
+
+  addLatestWallpaper(List data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i] != null) {
+        latestWallpaperdb.add(data[i]);
+      }
+    }
+    latestWallpaper = LatestWallpaper(latestWallpaperdb);
+    notifyListeners();
+    return latestWallpaper;
   }
 
   addsearch(List data) {
@@ -35,6 +52,11 @@ class AmoledFirebase with ChangeNotifier {
     return searchData;
   }
 
+  addStringvalue1(data) {
+    notifyListeners();
+    return value1 = data;
+  }
+
   addStringSearchdb(data) {
     notifyListeners();
     return searchdbtext = data;
@@ -42,7 +64,7 @@ class AmoledFirebase with ChangeNotifier {
 
   removeList(index) {
     firebasedb.removeAt(index);
-    crud("newwallpaper/new", Addvalue(firebasedb));
+    crud("newwallpaper/hot", Addvalue(firebasedb));
     wallpaper = Wallpaper(firebasedb);
     return wallpaper;
   }
@@ -51,10 +73,16 @@ class AmoledFirebase with ChangeNotifier {
     notifyListeners();
     return status = val;
   }
- bool updatesearchIcon(bool val) {
+
+  bool updatetrending(bool val) {
     notifyListeners();
+    return trending = val;
+  }
+
+  bool updatesearchIcon(bool val) {
     return searchIcon = val;
   }
+
   bool updatesearch(bool val) {
     notifyListeners();
     return searchField = val;
