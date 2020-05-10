@@ -22,7 +22,8 @@ class _SearchFieldState extends State<SearchField> {
 
   @override
   Widget build(BuildContext context) {
-    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+    AmoledFirebase amoledFirebase =
+        Provider.of<AmoledFirebase>(context, listen: false);
 
     return Container(
         child: SizedBox(
@@ -32,31 +33,31 @@ class _SearchFieldState extends State<SearchField> {
         child: TextField(
             controller: textEditingController,
             onChanged: (value) {
-              if (amoledFirebase.trending) {
-                var data = amoledFirebase.firebasedb
-                    .where((element) => element['title']
-                        .toString()
-                        .toLowerCase()
-                        .contains(value))
-                    .toList();
-                setState(() {
+              setState(() {
+                if (amoledFirebase.trending) {
+                  var data = amoledFirebase.firebasedb
+                      .where((element) => element['title']
+                          .toString()
+                          .toLowerCase()
+                          .contains(value))
+                      .toList();
+
                   amoledFirebase.searchdb.clear();
                   amoledFirebase.addsearch(data);
                   amoledFirebase.addStringSearchdb(value);
-                });
-              } else {
-                var data = amoledFirebase.latestWallpaperdb
-                    .where((element) => element['title']
-                        .toString()
-                        .toLowerCase()
-                        .contains(value))
-                    .toList();
-                setState(() {
+                } else {
+                  var data = amoledFirebase.latestWallpaperdb
+                      .where((element) => element['title']
+                          .toString()
+                          .toLowerCase()
+                          .contains(value))
+                      .toList();
+
                   amoledFirebase.searchdb.clear();
                   amoledFirebase.addsearch(data);
                   amoledFirebase.addStringSearchdb(value);
-                });
-              }
+                }
+              });
             },
             style: TextStyle(color: gainsborohs),
             cursorColor: gainsborohs,

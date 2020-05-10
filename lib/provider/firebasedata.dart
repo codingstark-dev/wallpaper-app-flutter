@@ -61,7 +61,7 @@ class AmoledFirebase with ChangeNotifier {
     notifyListeners();
     return searchdbtext = data;
   }
-
+//Todo: MAke new
   removeList(index) {
     firebasedb.removeAt(index);
     crud("newwallpaper/hot", Addvalue(firebasedb));

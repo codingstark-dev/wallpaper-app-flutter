@@ -121,6 +121,7 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
 
   @override
   Widget build(BuildContext context) {
+    // print("wallpaperdetail");
 // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
 //   statusBarColor: Colors.transparent,
 // ));

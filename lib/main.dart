@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -25,9 +24,8 @@ void main() {
   } catch (e) {
     print(e.toString());
   }
-  runApp(DevicePreview(
-    enabled: kReleaseMode,
-    builder: (context) => MaterialApp(
+  runApp(
+    MaterialApp(
       builder: (context, child) => MultiProvider(
         providers: [
           ChangeNotifierProvider<AmoledFirebase>(
@@ -42,7 +40,7 @@ void main() {
       onGenerateRoute: Router().onGenerateRoute,
       debugShowCheckedModeBanner: false,
     ),
-  ));
+  );
 }
 
 class MainScreenPage extends StatefulWidget {
@@ -52,8 +50,7 @@ class MainScreenPage extends StatefulWidget {
   _MainScreenPageState createState() => _MainScreenPageState();
 }
 
-class _MainScreenPageState extends State<MainScreenPage>
-    with TickerProviderStateMixin {
+class _MainScreenPageState extends State<MainScreenPage> {
   final ScrollController scrollController = ScrollController();
   bool loading = false;
   @override
@@ -90,9 +87,17 @@ class _MainScreenPageState extends State<MainScreenPage>
   }
 
   @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    scrollController.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     // print(scrollController.offset / 2 / 12);
-    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+    AmoledFirebase amoledFirebase =
+        Provider.of<AmoledFirebase>(context, listen: true);
 
     return AppBars(
       body: SafeArea(
@@ -102,9 +107,7 @@ class _MainScreenPageState extends State<MainScreenPage>
               curve: Curves.easeIn,
               onEnd: () {
                 if (!amoledFirebase.searchField)
-                  setState(() {
-                    amoledFirebase.updatevisibilty(false);
-                  });
+                  amoledFirebase.updatevisibilty(false);
               },
               opacity: amoledFirebase.searchField ? 1.0 : 0.0,
               duration: Duration(seconds: 1),
@@ -142,7 +145,7 @@ class _MainScreenPageState extends State<MainScreenPage>
                               child: Padding(
                                 padding: const EdgeInsets.fromLTRB(2, 40, 2, 2),
                                 child: Text(
-                                  'No Result Found With This Keyword "${amoledFirebase.searchdbtext}"',
+                                  'No Search Result Found With This Keyword "${amoledFirebase.searchdbtext}"',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.rancho(
                                       color: gainsborohs, fontSize: 20),

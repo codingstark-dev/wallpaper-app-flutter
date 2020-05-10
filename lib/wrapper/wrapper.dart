@@ -1,22 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/main.dart';
 import 'package:wallpaper/screen/introscreen.dart';
 import 'package:wallpaper/service/locator.dart';
 import 'package:wallpaper/service/setwallpaper/wallpaperfun.dart';
 
-class Wrapper extends StatelessWidget {
-  const Wrapper({Key key}) : super(key: key);
-  Future<bool> get getbool async {
-    bool navigate = await sl.get<WallpaperFun>().allreadyVisitingBool();
-    return navigate;
+class Wrapper extends StatefulWidget {
+  Wrapper({Key key}) : super(key: key);
+
+  @override
+  _WrapperState createState() => _WrapperState();
+}
+
+class _WrapperState extends State<Wrapper> {
+  bool loadingscreen;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    sl.get<WallpaperFun>().allreadyVisitingBool().then((value) => setState(() {
+          loadingscreen = value;
+        }));
   }
 
   @override
   Widget build(BuildContext context) {
-    if (getbool == true) {
+    if (loadingscreen == true) {
       return MainScreenPage();
-    } else {    
+    } else if (loadingscreen == false) {
       return IntroScreen();
+    } else {
+      return Container(
+        color: darkslategrayhs,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
   }
 }

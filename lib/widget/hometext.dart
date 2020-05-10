@@ -15,7 +15,8 @@ class HomeText extends StatefulWidget {
 class _HomeTextState extends State<HomeText> {
   @override
   Widget build(BuildContext context) {
-    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+    AmoledFirebase amoledFirebase =
+        Provider.of<AmoledFirebase>(context, listen: false);
 
     return Container(
       child: Padding(
@@ -47,18 +48,16 @@ class _HomeTextState extends State<HomeText> {
                     ));
               }).toList(),
               onChanged: (value) {
-                setState(() {
-                  amoledFirebase.addStringvalue1(value);
-                  switch (value) {
-                    case "Trending":
-                      amoledFirebase.updatetrending(true);
-                      break;
-                    case "Latest":
-                      amoledFirebase.updatetrending(false);
-                      break;
-                    default:
-                  }
-                });
+                amoledFirebase.addStringvalue1(value);
+                switch (value) {
+                  case "Trending":
+                    amoledFirebase.updatetrending(true);
+                    break;
+                  case "Latest":
+                    amoledFirebase.updatetrending(false);
+                    break;
+                  default:
+                }
               },
             )
           ],

@@ -17,7 +17,7 @@ class AppBars extends StatefulWidget {
 class _AppBarsState extends State<AppBars> {
   @override
   Widget build(BuildContext context) {
-    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context,listen: false);
     return Scaffold(
       backgroundColor: darkslategrayhs,
       drawer: Container(
@@ -25,8 +25,7 @@ class _AppBarsState extends State<AppBars> {
           width: 210,
           child: Theme(
             data: Theme.of(context).copyWith(
-              canvasColor:
-                  darkslategrayhs, //or any other color you want. e.g Colors.blue.withOpacity(0.5)
+              canvasColor: darkslategrayhs,
             ),
             child: Drawer(
               child: Column(
@@ -52,7 +51,6 @@ class _AppBarsState extends State<AppBars> {
                                       onTap: () {
                                         switch (e) {
                                           case "Home":
-                                         
                                             ExtendedNavigator.rootNavigator
                                                 .pushReplacementNamed(
                                                     Routes.mainScreenPage);
@@ -145,7 +143,8 @@ class _AppBarsState extends State<AppBars> {
                   ),
                 ),
                 title: Image.asset(
-                  "assets/svg/icons.png", height: 50,
+                  "assets/svg/icons.png",
+                  height: 50,
                 )),
           ),
           preferredSize: Size(50, 55)),
