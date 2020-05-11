@@ -132,6 +132,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                 handleLoadingProgress: true,
                                 // ignore: missing_return
                                 loadStateChanged: (state) {
+                                  if (!mounted) return null;
                                   switch (state.extendedImageLoadState) {
                                     case LoadState.loading:
                                       return SpinKitThreeBounce(
@@ -140,7 +141,7 @@ class _WallpaperListState extends State<WallpaperList> {
                                       );
                                       break;
                                     case LoadState.failed:
-                                      amoledFirebase.removeList(index);
+                                      amoledFirebase.removeHotList(index);
                                       return Center(
                                           child: Padding(
                                         padding: const EdgeInsets.all(3.0),

@@ -24,7 +24,7 @@ class SearchWallpaper extends StatefulWidget {
 class _SearchWallpaperState extends State<SearchWallpaper> {
   @override
   Widget build(BuildContext context) {
-     AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
+    AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
     return SizedBox(
       width: MediaQuery.of(context).size.width,
       child: GridView.builder(
@@ -135,7 +135,11 @@ class _SearchWallpaperState extends State<SearchWallpaper> {
                                       );
                                       break;
                                     case LoadState.failed:
-                                      amoledFirebase.removeList(index);
+                                      (amoledFirebase.trending)
+                                          ? amoledFirebase
+                                              .removeHotSearchList(index)
+                                          : amoledFirebase
+                                              .removeNewSearchList(index);
                                       return Center(
                                           child: Padding(
                                         padding: const EdgeInsets.all(3.0),

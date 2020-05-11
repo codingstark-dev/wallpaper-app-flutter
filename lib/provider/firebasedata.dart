@@ -61,12 +61,34 @@ class AmoledFirebase with ChangeNotifier {
     notifyListeners();
     return searchdbtext = data;
   }
+
 //Todo: MAke new
-  removeList(index) {
+  removeHotList(index) {
     firebasedb.removeAt(index);
     crud("newwallpaper/hot", Addvalue(firebasedb));
     wallpaper = Wallpaper(firebasedb);
     return wallpaper;
+  }
+
+  removeNewList(index) {
+    latestWallpaperdb.removeAt(index);
+    crud("newwallpaper/new", Addvalue(latestWallpaperdb));
+    latestWallpaper = LatestWallpaper(latestWallpaperdb);
+    return latestWallpaper;
+  }
+
+  removeNewSearchList(index) {
+    searchdb.removeAt(index);
+    crud("newwallpaper/new", Addvalue(searchdb));
+    searchData = SearchData(searchdb);
+    return searchData;
+  }
+
+  removeHotSearchList(index) {
+    searchdb.removeAt(index);
+    crud("newwallpaper/hot", Addvalue(searchdb));
+    searchData = SearchData(searchdb);
+    return searchData;
   }
 
   bool updateboxstatus(bool val) {

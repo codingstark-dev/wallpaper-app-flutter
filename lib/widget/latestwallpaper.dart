@@ -140,7 +140,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                       );
                                       break;
                                     case LoadState.failed:
-                                      amoledFirebase.removeList(index);
+                                      amoledFirebase.removeNewList(index);
                                       return Center(
                                           child: Padding(
                                         padding: const EdgeInsets.all(3.0),

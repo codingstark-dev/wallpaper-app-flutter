@@ -57,25 +57,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     super.initState();
     sl.get<WallpaperFun>().checkPermission();
-
-    FirebaseDatabase.instance
-        .reference()
-        .child("newwallpaper/hot")
-        .once()
-        .then((value) {
-      return Provider.of<AmoledFirebase>(context, listen: false)
-          .addWallpaper(value.value);
-    }).whenComplete(() => loading = true);
-
-    FirebaseDatabase.instance
-        .reference()
-        .child("newwallpaper/new")
-        .once()
-        .then((value) {
-      return Provider.of<AmoledFirebase>(context, listen: false)
-          .addLatestWallpaper(value.value);
-    });
-    Provider.of<AmoledFirebase>(context, listen: false).updatesearchIcon(true);
+    fetchDataFB();
     // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     // firebaseInstance.goOnline();
@@ -86,9 +68,30 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // databaseRef.keepSynced(true);
   }
 
+  Future fetchDataFB() async {
+    // bool loading = false;
+    await FirebaseDatabase.instance
+        .reference()
+        .child("newwallpaper/hot")
+        .once()
+        .then((value) {
+      return Provider.of<AmoledFirebase>(context, listen: false)
+          .addWallpaper(value.value);
+    }).whenComplete(() => loading = true);
+
+    await FirebaseDatabase.instance
+        .reference()
+        .child("newwallpaper/new")
+        .once()
+        .then((value) {
+      return Provider.of<AmoledFirebase>(context, listen: false)
+          .addLatestWallpaper(value.value);
+    });
+    Provider.of<AmoledFirebase>(context, listen: false).updatesearchIcon(true);
+  }
+
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     scrollController.dispose();
   }
