@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:auto_route/auto_route.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -23,24 +26,34 @@ void main() {
     serviceLocator();
   } catch (e) {
     print(e.toString());
-  }
-  runApp(
-    MaterialApp(
-      builder: (context, child) => MultiProvider(
-        providers: [
-          ChangeNotifierProvider<AmoledFirebase>(
-            create: (context) => AmoledFirebase(),
+  } // Set `enableInDevMode` to true to see reports while in debug mode
+  // This is only to be used for confirming that reports are being
+  // submitted as expected. It is not intended to be used for everyday
+  // development.
+  Crashlytics.instance.enableInDevMode = true;
+
+  // Pass all uncaught errors to Crashlytics.
+  FlutterError.onError = Crashlytics.instance.recordFlutterError;
+
+  runZoned(() {
+    runApp(
+      MaterialApp(
+        builder: (context, child) => MultiProvider(
+          providers: [
+            ChangeNotifierProvider<AmoledFirebase>(
+              create: (context) => AmoledFirebase(),
+            ),
+          ],
+          child: ExtendedNavigator(
+            router: Router(),
           ),
-        ],
-        child: ExtendedNavigator(
-          router: Router(),
         ),
+        initialRoute: Routes.mainScreenPage,
+        onGenerateRoute: Router().onGenerateRoute,
+        debugShowCheckedModeBanner: false,
       ),
-      initialRoute: Routes.mainScreenPage,
-      onGenerateRoute: Router().onGenerateRoute,
-      debugShowCheckedModeBanner: false,
-    ),
-  );
+    );
+  });
 }
 
 class MainScreenPage extends StatefulWidget {

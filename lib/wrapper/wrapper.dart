@@ -24,6 +24,7 @@ class _WrapperState extends State<Wrapper> {
           loadingscreen = value;
         }));
     versionCheck(context);
+    sl.get<WallpaperFun>().getNotification();
   }
 
   @override
@@ -93,9 +94,10 @@ class _WrapperState extends State<Wrapper> {
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(15.0))),
             elevation: 0.5,
-            title: Text(title),titleTextStyle: TextStyle(color: gainsborohs,fontSize: 20),
+            title: Text(title),
+            titleTextStyle: TextStyle(color: gainsborohs, fontSize: 20),
             content: Text(message),
-            contentTextStyle: TextStyle(color: gainsborohs,fontSize: 15),
+            contentTextStyle: TextStyle(color: gainsborohs, fontSize: 15),
             backgroundColor: darkslategrayhs,
             scrollable: true,
             actions: <Widget>[
