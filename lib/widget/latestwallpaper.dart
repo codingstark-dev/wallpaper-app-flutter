@@ -17,8 +17,9 @@ import 'package:wallpaper/service/locator.dart';
 class LatestWallpapers extends StatefulWidget {
   const LatestWallpapers({
     Key key,
+    @required this.itemcount,
   }) : super(key: key);
-
+  final int itemcount;
   // final DataSnapshot dataSnapshot;
 
   @override
@@ -26,6 +27,12 @@ class LatestWallpapers extends StatefulWidget {
 }
 
 class _LatestWallpapersState extends State<LatestWallpapers> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Provider.of<AmoledFirebase>(context,listen: false).addItemNumber(10);
+  }
   @override
   Widget build(BuildContext context) {
     AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
@@ -41,13 +48,15 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: amoledFirebase.latestWallpaper.preview.length
+        itemCount: widget.itemcount
+        // amoledFirebase.latestWallpaper.preview.length
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,
         itemBuilder: (BuildContext context, int index) {
           var date = new DateTime.fromMillisecondsSinceEpoch(double.parse(
-                      amoledFirebase.latestWallpaper.createdUtc[index].toString())
+                      amoledFirebase.latestWallpaper.createdUtc[index]
+                          .toString())
                   .floor() *
               1000);
           return Padding(
@@ -66,7 +75,8 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                           child: InkWell(
                             splashColor: Colors.red,
                             onTap: () {
-                              List lol = amoledFirebase.latestWallpaper.url[index]
+                              List lol = amoledFirebase
+                                  .latestWallpaper.url[index]
                                   .toString()
                                   .split(".");
                               // print(lol);
@@ -82,19 +92,19 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                           .latestWallpaper.imagebytes[index]
                                           .toString()),
                                       index: index,
-                                      url: amoledFirebase.latestWallpaper.url[index],
-                                      title: amoledFirebase
-                                          .latestWallpaper.title[index]
+                                      url: amoledFirebase
+                                          .latestWallpaper.url[index],
+                                      title: amoledFirebase.latestWallpaper.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       author: amoledFirebase
                                           .latestWallpaper.author[index],
-                                      ups: amoledFirebase.latestWallpaper.ups[index],
+                                      ups: amoledFirebase
+                                          .latestWallpaper.ups[index],
                                       date: timeago.format(date).toString(),
-                                      sizeofimage:
-                                          "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
-                                              "x " +
-                                              "${amoledFirebase.latestWallpaper.imageheight[index]}"));
+                                      sizeofimage: "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
+                                          "x " +
+                                          "${amoledFirebase.latestWallpaper.imageheight[index]}"));
 
                               // Navigator.push(
                               //     context,
@@ -278,7 +288,8 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                      amoledFirebase.latestWallpaper.title[index]
+                                      amoledFirebase
+                                          .latestWallpaper.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       style: TextStyle(

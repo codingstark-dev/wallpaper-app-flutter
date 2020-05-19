@@ -30,7 +30,7 @@ void main() {
   // This is only to be used for confirming that reports are being
   // submitted as expected. It is not intended to be used for everyday
   // development.
-  Crashlytics.instance.enableInDevMode = true;
+  Crashlytics.instance.enableInDevMode = false;
 
   // Pass all uncaught errors to Crashlytics.
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
@@ -64,13 +64,26 @@ class MainScreenPage extends StatefulWidget {
 }
 
 class _MainScreenPageState extends State<MainScreenPage> {
-  final ScrollController scrollController = ScrollController();
   bool loading = false;
+  final ScrollController scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    scrollController.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
     sl.get<WallpaperFun>().checkPermission();
     fetchDataFB();
+    scrollController.addListener(() {
+      if (scrollController.position.pixels ==
+          scrollController.position.maxScrollExtent) {
+        getmoreData();
+      }
+    });
     // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     // firebaseInstance.goOnline();
@@ -81,11 +94,45 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // databaseRef.keepSynced(true);
   }
 
+  getmoreData() async {
+    AmoledFirebase amoledFirebase =
+        Provider.of<AmoledFirebase>(context, listen: false);
+    print(amoledFirebase.itemCount);
+    if (amoledFirebase.trending) {
+      // if (amoledFirebase.wallpaper.preview.length > amoledFirebase.itemCount) {
+        
+          await FirebaseDatabase.instance
+              .reference()
+              .child("newwallpaper/hot")
+              .limitToFirst(amoledFirebase.itemCount)
+              .once()
+              .then((value) {
+            return Provider.of<AmoledFirebase>(context, listen: false)
+                .addWallpaper(value.value);
+          }).whenComplete(() => loading = true);
+       
+      // } else {
+      //   print("object");
+      //   setState(() {
+      //     amoledFirebase.addItemNumber(amoledFirebase.itemCount -= 1);
+      //   });
+      // }
+    } else {
+      if (amoledFirebase.latestWallpaper.preview.length >=
+          amoledFirebase.itemCount + 1) {
+        setState(() {
+          amoledFirebase.addItemNumber(amoledFirebase.itemCount += 10);
+        });
+      }
+    }
+  }
+
   Future fetchDataFB() async {
     // bool loading = false;
     await FirebaseDatabase.instance
         .reference()
         .child("newwallpaper/hot")
+        .limitToFirst(10)
         .once()
         .then((value) {
       return Provider.of<AmoledFirebase>(context, listen: false)
@@ -101,12 +148,6 @@ class _MainScreenPageState extends State<MainScreenPage> {
           .addLatestWallpaper(value.value);
     });
     Provider.of<AmoledFirebase>(context, listen: false).updatesearchIcon(true);
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    scrollController.dispose();
   }
 
   @override
@@ -134,6 +175,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
             ),
             Expanded(
               child: ListView(
+                controller: scrollController,
                 children: [
                   // HomeText(
                   //   text: "Categories",
@@ -151,7 +193,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
                         );
                       if (amoledFirebase.trending) {
                         if (amoledFirebase.searchdbtext == "") {
-                          return WallpaperList();
+                          return WallpaperList(
+                            itemcount: amoledFirebase.itemCount,
+                          );
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
                           return SearchWallpaper();
                         } else {
@@ -172,7 +216,9 @@ class _MainScreenPageState extends State<MainScreenPage> {
                         }
                       } else {
                         if (amoledFirebase.searchdbtext == "") {
-                          return LatestWallpapers();
+                          return LatestWallpapers(
+                            itemcount: amoledFirebase.itemCount,
+                          );
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
                           return SearchWallpaper();
                         } else {

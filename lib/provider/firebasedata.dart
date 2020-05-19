@@ -14,7 +14,7 @@ class AmoledFirebase with ChangeNotifier {
   LoadState loadingval;
   bool isVisible = false;
   String value1 = "Trending";
-
+  int itemCount = 10;
   String searchdbtext = "";
   bool searchIcon = true;
   bool trending = true;
@@ -28,6 +28,11 @@ class AmoledFirebase with ChangeNotifier {
     wallpaper = Wallpaper(firebasedb);
     notifyListeners();
     return wallpaper;
+  }
+
+  addItemNumber(int nu) {
+    notifyListeners();
+    return itemCount = nu;
   }
 
   addLatestWallpaper(List data) {

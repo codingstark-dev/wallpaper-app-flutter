@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
 import 'package:wallpaper/helper/color.dart';
@@ -17,8 +18,9 @@ import 'package:wallpaper/service/locator.dart';
 class WallpaperList extends StatefulWidget {
   const WallpaperList({
     Key key,
+    @required this.itemcount,
   }) : super(key: key);
-
+  final int itemcount;
   // final DataSnapshot dataSnapshot;
 
   @override
@@ -41,7 +43,8 @@ class _WallpaperListState extends State<WallpaperList> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: amoledFirebase.wallpaper.preview.length
+        itemCount: 
+        amoledFirebase.wallpaper.preview.length
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,
@@ -126,7 +129,8 @@ class _WallpaperListState extends State<WallpaperList> {
                               width: 250,
                               child: ExtendedImage.network(
                                 amoledFirebase.wallpaper.preview[index],
-                                fit: BoxFit.cover, alignment: Alignment.center,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
                                 enableLoadState: true,
                                 filterQuality: FilterQuality.high,
                                 handleLoadingProgress: true,
