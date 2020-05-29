@@ -47,7 +47,7 @@ class AmoledFirebase with ChangeNotifier {
     return itemCount = nu;
   }
 
-  addLatestWallpaper(List data) {
+  addLatestWallpaper(data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] != null) {
         latestWallpaperdb.add(data[i]);
@@ -58,7 +58,7 @@ class AmoledFirebase with ChangeNotifier {
     return latestWallpaper;
   }
 
-  addsearch(List data) {
+  addsearch( data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] != null) {
         searchdb.add(data[i]);

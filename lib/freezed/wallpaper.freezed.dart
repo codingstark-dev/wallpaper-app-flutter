@@ -752,7 +752,11 @@ class _$_SearchData with DiagnosticableTreeMixin implements _SearchData {
   List<dynamic> get preview {
     if (_didpreview == false) {
       _didpreview = true;
-      _preview = searchData.map((e) => e['preview']).toList();
+      _preview = searchData
+          .map((e) => e['preview']['images'][0]['resolutions'][1]['url']
+              .toString()
+              .replaceAll("amp;", ""))
+          .toList();
     }
     return _preview;
   }
@@ -776,7 +780,7 @@ class _$_SearchData with DiagnosticableTreeMixin implements _SearchData {
   List<dynamic> get image {
     if (_didimage == false) {
       _didimage = true;
-      _image = searchData.map((e) => e['image']).toList();
+      _image = searchData.map((e) => e['url']).toList();
     }
     return _image;
   }
@@ -812,50 +816,14 @@ class _$_SearchData with DiagnosticableTreeMixin implements _SearchData {
   List<dynamic> get url {
     if (_didurl == false) {
       _didurl = true;
-      _url = searchData.map((e) => e['image']).toList();
+      _url = searchData.map((e) => e['url']).toList();
     }
     return _url;
   }
 
-  bool _didimagebytes = false;
-  List<dynamic> _imagebytes;
-
-  @override
-  List<dynamic> get imagebytes {
-    if (_didimagebytes == false) {
-      _didimagebytes = true;
-      _imagebytes = searchData.map((e) => e['imagebytes']).toList();
-    }
-    return _imagebytes;
-  }
-
-  bool _didimagewidth = false;
-  List<dynamic> _imagewidth;
-
-  @override
-  List<dynamic> get imagewidth {
-    if (_didimagewidth == false) {
-      _didimagewidth = true;
-      _imagewidth = searchData.map((e) => e['imagesize'][0]).toList();
-    }
-    return _imagewidth;
-  }
-
-  bool _didimageheight = false;
-  List<dynamic> _imageheight;
-
-  @override
-  List<dynamic> get imageheight {
-    if (_didimageheight == false) {
-      _didimageheight = true;
-      _imageheight = searchData.map((e) => e['imagesize'][1]).toList();
-    }
-    return _imageheight;
-  }
-
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SearchData(searchData: $searchData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+    return 'SearchData(searchData: $searchData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url)';
   }
 
   @override
@@ -871,10 +839,7 @@ class _$_SearchData with DiagnosticableTreeMixin implements _SearchData {
       ..add(DiagnosticsProperty('image', image))
       ..add(DiagnosticsProperty('ups', ups))
       ..add(DiagnosticsProperty('createdUtc', createdUtc))
-      ..add(DiagnosticsProperty('url', url))
-      ..add(DiagnosticsProperty('imagebytes', imagebytes))
-      ..add(DiagnosticsProperty('imagewidth', imagewidth))
-      ..add(DiagnosticsProperty('imageheight', imageheight));
+      ..add(DiagnosticsProperty('url', url));
   }
 
   @override
@@ -1021,7 +986,11 @@ class _$_LatestWallpaper
   List<dynamic> get preview {
     if (_didpreview == false) {
       _didpreview = true;
-      _preview = latestwallpaperData.map((e) => e['preview']).toList();
+      _preview = latestwallpaperData
+          .map((e) => e['preview']['images'][0]['resolutions'][2]['url']
+              .toString()
+              .replaceAll("amp;", ""))
+          .toList();
     }
     return _preview;
   }
@@ -1045,7 +1014,7 @@ class _$_LatestWallpaper
   List<dynamic> get image {
     if (_didimage == false) {
       _didimage = true;
-      _image = latestwallpaperData.map((e) => e['image']).toList();
+      _image = latestwallpaperData.map((e) => e['url']).toList();
     }
     return _image;
   }
@@ -1081,50 +1050,14 @@ class _$_LatestWallpaper
   List<dynamic> get url {
     if (_didurl == false) {
       _didurl = true;
-      _url = latestwallpaperData.map((e) => e['image']).toList();
+      _url = latestwallpaperData.map((e) => e['url']).toList();
     }
     return _url;
   }
 
-  bool _didimagebytes = false;
-  List<dynamic> _imagebytes;
-
-  @override
-  List<dynamic> get imagebytes {
-    if (_didimagebytes == false) {
-      _didimagebytes = true;
-      _imagebytes = latestwallpaperData.map((e) => e['imagebytes']).toList();
-    }
-    return _imagebytes;
-  }
-
-  bool _didimagewidth = false;
-  List<dynamic> _imagewidth;
-
-  @override
-  List<dynamic> get imagewidth {
-    if (_didimagewidth == false) {
-      _didimagewidth = true;
-      _imagewidth = latestwallpaperData.map((e) => e['imagesize'][0]).toList();
-    }
-    return _imagewidth;
-  }
-
-  bool _didimageheight = false;
-  List<dynamic> _imageheight;
-
-  @override
-  List<dynamic> get imageheight {
-    if (_didimageheight == false) {
-      _didimageheight = true;
-      _imageheight = latestwallpaperData.map((e) => e['imagesize'][1]).toList();
-    }
-    return _imageheight;
-  }
-
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'LatestWallpaper(latestwallpaperData: $latestwallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+    return 'LatestWallpaper(latestwallpaperData: $latestwallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url)';
   }
 
   @override
@@ -1140,10 +1073,7 @@ class _$_LatestWallpaper
       ..add(DiagnosticsProperty('image', image))
       ..add(DiagnosticsProperty('ups', ups))
       ..add(DiagnosticsProperty('createdUtc', createdUtc))
-      ..add(DiagnosticsProperty('url', url))
-      ..add(DiagnosticsProperty('imagebytes', imagebytes))
-      ..add(DiagnosticsProperty('imagewidth', imagewidth))
-      ..add(DiagnosticsProperty('imageheight', imageheight));
+      ..add(DiagnosticsProperty('url', url));
   }
 
   @override

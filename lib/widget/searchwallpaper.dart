@@ -154,32 +154,35 @@ class _SearchWallpaperState extends State<SearchWallpaper> {
                             ),
                           ),
                         ),
-                        Positioned(
-                          left: 10,
-                          top: 10,
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: gainsborohs.withOpacity(0.6),
-                                  border:
-                                      Border.all(width: 1, color: gainsborohs)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                    "${amoledFirebase.searchData.imagewidth[index]} " +
-                                        "x " +
-                                        "${amoledFirebase.searchData.imageheight[index]}",
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontSize: 9,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white)),
-                              ),
-                            ),
-                          ),
-                        ),
+                        //todo: activate
+                        // Positioned(
+                        //   left: 10,
+                        //   top: 10,
+                        //   child: Padding(
+                        //     padding: const EdgeInsets.all(2.0),
+                        //     child: Container(
+                        //       decoration: BoxDecoration(
+                        //           borderRadius: BorderRadius.circular(5),
+                        //           color: gainsborohs.withOpacity(0.6),
+                        //           border:
+                        //               Border.all(width: 1, color: gainsborohs)),
+                        //       child: Padding(
+                        //         padding: const EdgeInsets.all(3.0),
+                        //         child: Text(
+                        //             "${amoledFirebase.searchData.imagewidth[index]} " +
+                        //                 "x " +
+                        //                 "${amoledFirebase.searchData.imageheight[index]}",
+                        //             textAlign: TextAlign.left,
+                        //             style: TextStyle(
+                        //                 fontSize: 9,
+                        //                 fontWeight: FontWeight.bold,
+                        //                 color: Colors.white)),
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                      
+                      
                         Positioned(
                           bottom: 40,
                           left: 5,
@@ -209,24 +212,24 @@ class _SearchWallpaperState extends State<SearchWallpaper> {
                               //               color: Colors.white)),
                               //     ),
                               //   ),
-                              // ),
-
-                              Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: gainsborohs.withOpacity(0.6),
-                                      border: Border.all(
-                                          width: 1, color: gainsborohs)),
-                                  child: Text(
-                                      filesize(amoledFirebase
-                                          .searchData.imagebytes[index]
-                                          .toString()),
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white))),
+                              // )
+                              //todo: activate
+                              // Container(
+                              //     padding: EdgeInsets.all(3),
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(5),
+                              //         color: gainsborohs.withOpacity(0.6),
+                              //         border: Border.all(
+                              //             width: 1, color: gainsborohs)),
+                              //     child: Text(
+                              //         filesize(amoledFirebase
+                              //             .searchData.imagebytes[index]
+                              //             .toString()),
+                              //         textAlign: TextAlign.left,
+                              //         style: TextStyle(
+                              //             fontSize: 10,
+                              //             fontWeight: FontWeight.bold,
+                              //             color: Colors.white))),
                               SizedBox(
                                 width: 6,
                               ),

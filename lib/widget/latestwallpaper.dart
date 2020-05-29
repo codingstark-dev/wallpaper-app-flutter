@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'package:auto_route/auto_route.dart';
-import 'package:filesize/filesize.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -17,9 +17,8 @@ import 'package:wallpaper/service/locator.dart';
 class LatestWallpapers extends StatefulWidget {
   const LatestWallpapers({
     Key key,
-    @required this.itemcount,
   }) : super(key: key);
-  final int itemcount;
+  // final int itemcount;
   // final DataSnapshot dataSnapshot;
 
   @override
@@ -27,12 +26,8 @@ class LatestWallpapers extends StatefulWidget {
 }
 
 class _LatestWallpapersState extends State<LatestWallpapers> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    Provider.of<AmoledFirebase>(context,listen: false).addItemNumber(10);
-  }
+  int width = 0;
+  int height = 0;
   @override
   Widget build(BuildContext context) {
     AmoledFirebase amoledFirebase = Provider.of<AmoledFirebase>(context);
@@ -48,17 +43,27 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: widget.itemcount
-        // amoledFirebase.latestWallpaper.preview.length
+        itemCount: amoledFirebase.latestWallpaper.preview.length
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,
         itemBuilder: (BuildContext context, int index) {
           var date = new DateTime.fromMillisecondsSinceEpoch(double.parse(
-                      amoledFirebase.latestWallpaper.createdUtc[index]
-                          .toString())
+                      amoledFirebase.latestWallpaper.createdUtc[index].toString())
                   .floor() *
               1000);
+          // var size = http
+          //     .head(amoledFirebase.wallpaper.url[index])
+          //     .then((value) => value.headers['content-type'])
+          //     .toString();
+          // Image image =
+          //     new Image.network('https://i.stack.imgur.com/lkd0a.png');
+          // Completer<ui.Image> completer = new Completer<ui.Image>();
+          // image.image
+          //     .resolve(new ImageConfiguration())
+          //     .addListener(new ImageStreamListener((ImageInfo image, bool _) {
+          //   completer.complete(image.image);
+          // }));
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
@@ -75,8 +80,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                           child: InkWell(
                             splashColor: Colors.red,
                             onTap: () {
-                              List lol = amoledFirebase
-                                  .latestWallpaper.url[index]
+                              List lol = amoledFirebase.latestWallpaper.url[index]
                                   .toString()
                                   .split(".");
                               // print(lol);
@@ -89,24 +93,24 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                   arguments: WallpaperDetailArguments(
                                       imageextenstion: lol[3],
                                       // imagebytes: filesize(amoledFirebase
-                                      //     .latestWallpaper.imagebytes[index]
+                                      //     .wallpaper.imagebytes[index]
                                       //     .toString()),
                                       index: index,
-                                      url: amoledFirebase
-                                          .latestWallpaper.url[index],
-                                      title: amoledFirebase.latestWallpaper.title[index]
+                                      url: amoledFirebase.latestWallpaper.url[index],
+                                      title: amoledFirebase
+                                          .latestWallpaper.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       author: amoledFirebase
                                           .latestWallpaper.author[index],
-                                      ups: amoledFirebase
-                                          .latestWallpaper.ups[index],
-                                      date: timeago.format(date).toString(),
-                                      // sizeofimage: "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
-                                      //     "x " +
-                                      //     "${amoledFirebase.latestWallpaper.imageheight[index]}"
-                                          )
-                                          );
+                                      ups: amoledFirebase.latestWallpaper.ups[index],
+                                       date: timeago.format(date).toString(),
+                                      //  timeago.format(date).toString(),
+                                      // sizeofimage:
+                                      //     "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                      //         "x " +
+                                      //         "${amoledFirebase.wallpaper.imageheight[index]}"
+                                      ));
 
                               // Navigator.push(
                               //     context,
@@ -138,12 +142,15 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                               width: 250,
                               child: ExtendedImage.network(
                                 amoledFirebase.latestWallpaper.preview[index],
-                                fit: BoxFit.cover, alignment: Alignment.center,
+                                fit: BoxFit.cover,
+                                alignment: Alignment.center,
                                 enableLoadState: true,
                                 filterQuality: FilterQuality.high,
                                 handleLoadingProgress: true,
                                 // ignore: missing_return
                                 loadStateChanged: (state) {
+                                  if (!mounted) return null;
+
                                   switch (state.extendedImageLoadState) {
                                     case LoadState.loading:
                                       return SpinKitThreeBounce(
@@ -152,7 +159,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                       );
                                       break;
                                     case LoadState.failed:
-                                      amoledFirebase.removeNewList(index);
+                                      // amoledFirebase.removeHotList(index);
                                       return Center(
                                           child: Padding(
                                         padding: const EdgeInsets.all(3.0),
@@ -161,11 +168,21 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                       ));
                                     default:
                                   }
+                                  if (state.extendedImageInfo?.image == null)
+                                    return null;
+
+                                  height =
+                                      state.extendedImageInfo.image?.height ??
+                                          0;
+                                  width =
+                                      state.extendedImageInfo.image?.width ?? 0;
                                 },
                               ),
                             ),
                           ),
                         ),
+
+                        //TODO: recreate
                         Positioned(
                           left: 10,
                           top: 10,
@@ -179,10 +196,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                       Border.all(width: 1, color: gainsborohs)),
                               child: Padding(
                                 padding: const EdgeInsets.all(3.0),
-                                child: Text(
-                                    "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
-                                        "x " +
-                                        "${amoledFirebase.latestWallpaper.imageheight[index]}",
+                                child: Text("$width " + "x " + "$height",
                                     textAlign: TextAlign.left,
                                     style: TextStyle(
                                         fontSize: 9,
@@ -192,6 +206,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                             ),
                           ),
                         ),
+
                         Positioned(
                           bottom: 40,
                           left: 5,
@@ -222,23 +237,21 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                               //     ),
                               //   ),
                               // ),
-
-                              Container(
-                                  padding: EdgeInsets.all(3),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(5),
-                                      color: gainsborohs.withOpacity(0.6),
-                                      border: Border.all(
-                                          width: 1, color: gainsborohs)),
-                                  child: Text(
-                                      filesize(amoledFirebase
-                                          .latestWallpaper.imagebytes[index]
-                                          .toString()),
-                                      textAlign: TextAlign.left,
-                                      style: TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white))),
+                              //TODO: recreate
+                              // Container(
+                              //     padding: EdgeInsets.all(3),
+                              //     decoration: BoxDecoration(
+                              //         borderRadius: BorderRadius.circular(5),
+                              //         color: gainsborohs.withOpacity(0.6),
+                              //         border: Border.all(
+                              //             width: 1, color: gainsborohs)),
+                              //     child: Text(
+                              //         filesize(size.toString()),
+                              //         textAlign: TextAlign.left,
+                              //         style: TextStyle(
+                              //             fontSize: 10,
+                              //             fontWeight: FontWeight.bold,
+                              //             color: Colors.white))),
                               SizedBox(
                                 width: 6,
                               ),
@@ -290,8 +303,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                 children: <Widget>[
                                   Expanded(
                                     child: Text(
-                                      amoledFirebase
-                                          .latestWallpaper.title[index]
+                                      amoledFirebase.latestWallpaper.title[index]
                                           .toString()
                                           .dbFilterTitle,
                                       style: TextStyle(
@@ -410,6 +422,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                       alignment: Alignment.topLeft,
                       child: Text(
                         timeago.format(date),
+                        // '33',
                         style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.w400,

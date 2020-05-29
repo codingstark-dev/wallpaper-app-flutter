@@ -79,11 +79,15 @@ abstract class SearchData with _$SearchData {
   @late
   List<dynamic> get author => searchData.map((e) => e['author']).toList();
   @late
-  List<dynamic> get preview => searchData.map((e) => e['preview']).toList();
+  List<dynamic> get preview => searchData
+      .map((e) => e['preview']['images'][0]['resolutions'][2]['url']
+          .toString()
+          .replaceAll("amp;", ""))
+      .toList();
   @late
   List<dynamic> get permalink => searchData.map((e) => e['permalink']).toList();
   @late
-  List<dynamic> get image => searchData.map((e) => e['image']).toList();
+  List<dynamic> get image => searchData.map((e) => e['url']).toList();
   @late
   List<dynamic> get ups => searchData.map((e) => e['ups']).toList();
   @late
@@ -93,16 +97,7 @@ abstract class SearchData with _$SearchData {
   // List<dynamic> get wallpaper =>
   //     searchData.map((e) => e['wallpaper']).toList();
   @late
-  List<dynamic> get url => searchData.map((e) => e['image']).toList();
-  @late
-  List<dynamic> get imagebytes =>
-      searchData.map((e) => e['imagebytes']).toList();
-  @late
-  List<dynamic> get imagewidth =>
-      searchData.map((e) => e['imagesize'][0]).toList();
-  @late
-  List<dynamic> get imageheight =>
-      searchData.map((e) => e['imagesize'][1]).toList();
+  List<dynamic> get url => searchData.map((e) => e['url']).toList();
 }
 
 @freezed
@@ -117,14 +112,16 @@ abstract class LatestWallpaper with _$LatestWallpaper {
   List<dynamic> get author =>
       latestwallpaperData.map((e) => e['author']).toList();
   @late
-  List<dynamic> get preview =>
-      latestwallpaperData.map((e) => e['preview']).toList();
+  List<dynamic> get preview => latestwallpaperData
+      .map((e) => e['preview']['images'][0]['resolutions'][2]['url']
+          .toString()
+          .replaceAll("amp;", ""))
+      .toList();
   @late
   List<dynamic> get permalink =>
       latestwallpaperData.map((e) => e['permalink']).toList();
   @late
-  List<dynamic> get image =>
-      latestwallpaperData.map((e) => e['image']).toList();
+  List<dynamic> get image => latestwallpaperData.map((e) => e['url']).toList();
   @late
   List<dynamic> get ups => latestwallpaperData.map((e) => e['ups']).toList();
   @late
@@ -134,14 +131,5 @@ abstract class LatestWallpaper with _$LatestWallpaper {
   // List<dynamic> get wallpaper =>
   //     latestwallpaperData.map((e) => e['wallpaper']).toList();
   @late
-  List<dynamic> get url => latestwallpaperData.map((e) => e['image']).toList();
-  @late
-  List<dynamic> get imagebytes =>
-      latestwallpaperData.map((e) => e['imagebytes']).toList();
-  @late
-  List<dynamic> get imagewidth =>
-      latestwallpaperData.map((e) => e['imagesize'][0]).toList();
-  @late
-  List<dynamic> get imageheight =>
-      latestwallpaperData.map((e) => e['imagesize'][1]).toList();
+  List<dynamic> get url => latestwallpaperData.map((e) => e['url']).toList();
 }

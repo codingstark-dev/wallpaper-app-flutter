@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
+import 'package:share/share.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wallpaper/helper/color.dart';
 import 'package:wallpaper/helper/list_s.dart';
@@ -159,6 +160,17 @@ class _AppBarsState extends State<AppBars> {
                                             }
                                             print(info.packageName);
                                             break;
+                                          case "Share This App":
+                                            final PackageInfo info =
+                                                await PackageInfo
+                                                    .fromPlatform();
+                                            Share.share(
+                                                'Check out Refox Wallpaper get 4k Amoled Dope Wallpapers!!  https://play.google.com/store/apps/details?id=${info.packageName}',
+                                                subject:
+                                                    '4k Amoled wallpapers!!');
+
+                                            break;
+
                                           default:
                                         }
                                       },
@@ -262,6 +274,9 @@ extension Iconchanger on Widget {
         break;
       case "Rate This App":
         return list[3];
+        break;
+      case "Share This App":
+        return list[5];
         break;
       default:
     }

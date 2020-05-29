@@ -3,7 +3,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:wallpaper/helper/color.dart';
 
 class ListCollection {
-  List draw = ["Home", "Download", "Disclaimer", "Rate This App", "Report Bug"];
+  List draw = ["Home", "Download", "Disclaimer", "Rate This App", "Report Bug",'Share This App'];
   List list = [
     Icon(
       FontAwesomeIcons.home,
@@ -25,5 +25,9 @@ class ListCollection {
       FontAwesomeIcons.bug,
       color: gainsborohs,
     ),
+    Icon(
+      FontAwesomeIcons.share,
+      color: gainsborohs,
+    )
   ];
 }

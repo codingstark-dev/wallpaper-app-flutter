@@ -91,26 +91,24 @@ class _WallpaperListState extends State<WallpaperList> {
                               ExtendedNavigator.rootNavigator.pushNamed(
                                   Routes.wallpaperDetail,
                                   arguments: WallpaperDetailArguments(
-                                      imageextenstion: lol[3],
-                                      // imagebytes: filesize(amoledFirebase
-                                      //     .wallpaper.imagebytes[index]
-                                      //     .toString()),
-                                      index: index,
-                                      url: amoledFirebase.wallpaper.url[index],
-                                      title: amoledFirebase
-                                          .wallpaper.title[index]
-                                          .toString()
-                                          .dbFilterTitle,
-                                      author: amoledFirebase
-                                          .wallpaper.author[index],
-                                      ups: amoledFirebase.wallpaper.ups[index],
-                                      date: "22"
-                                      //  timeago.format(date).toString(),
-                                      // sizeofimage:
-                                      //     "${amoledFirebase.wallpaper.imagewidth[index]} " +
-                                      //         "x " +
-                                      //         "${amoledFirebase.wallpaper.imageheight[index]}"
-                                      ));
+                                    imageextenstion: lol[3],
+                                    // imagebytes: filesize(amoledFirebase
+                                    //     .wallpaper.imagebytes[index]
+                                    //     .toString()),
+                                    index: index,
+                                    url: amoledFirebase.wallpaper.url[index],
+                                    title: amoledFirebase.wallpaper.title[index]
+                                        .toString()
+                                        .dbFilterTitle,
+                                    author:
+                                        amoledFirebase.wallpaper.author[index],
+                                    ups: amoledFirebase.wallpaper.ups[index],
+                                    date: timeago.format(date).toString(),
+                                    // sizeofimage:
+                                    //     "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                    //         "x " +
+                                    //         "${amoledFirebase.wallpaper.imageheight[index]}"
+                                  ));
 
                               // Navigator.push(
                               //     context,
@@ -498,24 +496,27 @@ extension StringExtensions on String {
   }
 }
 
-extension Iconchanger on Widget {
-  // ignore: missing_return
-  iconchange(lol) {
-    var list = sl.get<ListCollection>().list;
-    switch (lol) {
-      case "Home":
-        return list[0];
-        break;
-      case "Download":
-        return list[1];
-        break;
-      case "Privacy Policy":
-        return list[2];
-        break;
-      case "Contact Us":
-        return list[3];
-        break;
-      default:
-    }
-  }
-}
+// extension Iconchanger on Widget {
+//   // ignore: missing_return
+//   iconchange(lol) {
+//     var list = sl.get<ListCollection>().list;
+//     switch (lol) {
+//       case "Home":
+//         return list[0];
+//         break;
+//       case "Download":
+//         return list[1];
+//         break;
+//       case "Privacy Policy":
+//         return list[2];
+//         break;
+//       case "Contact Us":
+//         return list[3];
+//         break;
+//       case "Share This App":
+//         return list[4];
+//         break;
+//       default:
+//     }
+//   }
+// }

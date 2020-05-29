@@ -30,7 +30,7 @@ void main() {
   // This is only to be used for confirming that reports are being
   // submitted as expected. It is not intended to be used for everyday
   // development.
-  Crashlytics.instance.enableInDevMode = false;
+  Crashlytics.instance.enableInDevMode = true;
 
   // Pass all uncaught errors to Crashlytics.
   FlutterError.onError = Crashlytics.instance.recordFlutterError;
@@ -116,7 +116,8 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // databaseRef.keepSynced(true);
   }
 
-  List datssa = [];
+  List weekdata = [];
+  List newestdata = [];
   Future<dynamic> redditData(int i) async {
     var amoledFirebase = Provider.of<AmoledFirebase>(context, listen: false);
     Reddit.Reddit reddit = await Reddit.Reddit.createScriptInstance(
@@ -130,9 +131,12 @@ class _MainScreenPageState extends State<MainScreenPage> {
 
     Reddit.SubredditRef currentUser = reddit.subreddit("Amoledbackgrounds");
     // Outputs: My name is DRAWApiOfficial
-    Stream<Reddit.UserContent> data =
-        currentUser.top(limit: i, timeFilter: Reddit.TimeFilter.month);
-    data.forEach((element) async {
+    Stream<Reddit.UserContent> week =
+        currentUser.top(limit: i, timeFilter: Reddit.TimeFilter.week);
+    Stream<Reddit.UserContent> newest = currentUser.newest(
+      limit: i,
+    );
+    week.forEach((element) async {
       var data = await element.fetch();
 
       Reddit.Submission submission = data[0]['listing'][0];
@@ -142,11 +146,31 @@ class _MainScreenPageState extends State<MainScreenPage> {
           submission.over18 != true) {
         // List<SubmissionPreview> s = submission.preview;
         //  print(s[3]);
-        datssa.clear();
-        datssa.add(submission.data);
-        // print(datssa.toList());
-        for (var i = 0; i < datssa.length; i++) {
-          amoledFirebase.addWallpaper(datssa);
+        weekdata.clear();
+        weekdata.add(submission.data);
+        // print(weekdata.toList());
+        for (var i = 0; i < weekdata.length; i++) {
+          amoledFirebase.addWallpaper(weekdata);
+        }
+        setState(() {});
+        loading = true;
+      }
+    });
+    newest.forEach((element) async {
+      var data = await element.fetch();
+
+      Reddit.Submission submission = data[0]['listing'][0];
+      if (submission.url.path.trim().contains("png") ||
+          submission.url.path.trim().contains("jpeg") ||
+          submission.url.path.trim().contains("jpg") &&
+              submission.over18 != true) {
+        // List<SubmissionPreview> s = submission.preview;
+
+        newestdata.clear();
+        newestdata.add(submission.data);
+        // print(newestdata.toList());
+        for (var i = 0; i < newestdata.length; i++) {
+          amoledFirebase.addLatestWallpaper(newestdata);
         }
         setState(() {});
         loading = true;
@@ -253,9 +277,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                         );
                       if (amoledFirebase.trending) {
                         if (amoledFirebase.searchdbtext == "") {
-                          return WallpaperList(
-                           
-                          );
+                          return WallpaperList();
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
                           return SearchWallpaper();
                         } else {
@@ -276,9 +298,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                         }
                       } else {
                         if (amoledFirebase.searchdbtext == "") {
-                          return LatestWallpapers(
-                            itemcount: amoledFirebase.itemCount,
-                          );
+                          return LatestWallpapers();
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
                           return SearchWallpaper();
                         } else {
