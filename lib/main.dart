@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -18,6 +17,7 @@ import 'package:wallpaper/widget/latestwallpaper.dart';
 import 'package:wallpaper/widget/searchField.dart';
 import 'package:wallpaper/widget/searchwallpaper.dart';
 import 'package:wallpaper/widget/wallpaperoverlay.dart';
+import 'package:draw/draw.dart' as Reddit;
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -66,6 +66,9 @@ class MainScreenPage extends StatefulWidget {
 class _MainScreenPageState extends State<MainScreenPage> {
   bool loading = false;
   final ScrollController scrollController = ScrollController();
+  int increament = 10;
+  int contentcount = 0;
+  // List datssa = [];
 
   @override
   void dispose() {
@@ -77,13 +80,32 @@ class _MainScreenPageState extends State<MainScreenPage> {
   void initState() {
     super.initState();
     sl.get<WallpaperFun>().checkPermission();
-    fetchDataFB();
-    scrollController.addListener(() {
-      if (scrollController.position.pixels ==
-          scrollController.position.maxScrollExtent) {
-        getmoreData();
-      }
+    // fetchDataFB();
+    redditData(100).whenComplete(() {
+      return loading = true;
     });
+
+    // scrollController.addListener(() {
+    //   double maxScroll = scrollController.position.maxScrollExtent;
+    //   double currentScroll = scrollController.position.pixels;
+    //   double delta = MediaQuery.of(context).size.height * 0.20;
+    //   if (maxScroll - currentScroll <= delta) {
+    //     getmoreData();
+    //   }
+    // });
+    // scrollController.addListener(() {
+    //   // var triggerFetchMoreSize =
+    //   //     0.9 * scrollController.position.maxScrollExtent;
+
+    //   // if (scrollController.position.pixels > triggerFetchMoreSize) {
+    //   //
+    //   // }
+
+    //   // if (scrollController.position.pixels ==
+    //   //     scrollController.position.maxScrollExtent) {
+    //   //   getmoreData();
+    //   // }
+    // });
     // FirebaseDatabase firebaseInstance = FirebaseDatabase.instance;
 
     // firebaseInstance.goOnline();
@@ -94,49 +116,87 @@ class _MainScreenPageState extends State<MainScreenPage> {
     // databaseRef.keepSynced(true);
   }
 
+  List datssa = [];
+  Future<dynamic> redditData(int i) async {
+    var amoledFirebase = Provider.of<AmoledFirebase>(context, listen: false);
+    Reddit.Reddit reddit = await Reddit.Reddit.createScriptInstance(
+      clientId: 'W1XGqNQSKF2h4w',
+      clientSecret: '32CM4A9gSaIGVJFTwCHtKjWt7Xg',
+      userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+      username: "himanshu338",
+      password: "6b6WNmT*qZQ@qvx", // Fake
+    );
+
+    Reddit.SubredditRef currentUser = reddit.subreddit("Amoledbackgrounds");
+    // Outputs: My name is DRAWApiOfficial
+    Stream<Reddit.UserContent> data =
+        currentUser.top(limit: i, timeFilter: Reddit.TimeFilter.month);
+    data.forEach((element) async {
+      var data = await element.fetch();
+
+      Reddit.Submission submission = data[0]['listing'][0];
+      if (submission.url.path.trim().contains("png") ||
+          submission.url.path.trim().contains("jpeg") ||
+          submission.url.path.trim().contains("jpg") ||
+          submission.over18 != true) {
+        // List<SubmissionPreview> s = submission.preview;
+        //  print(s[3]);
+        datssa.clear();
+        datssa.add(submission.data);
+        // print(datssa.toList());
+        for (var i = 0; i < datssa.length; i++) {
+          amoledFirebase.addWallpaper(datssa);
+        }
+        setState(() {});
+        loading = true;
+      }
+    });
+  }
+
   getmoreData() async {
     AmoledFirebase amoledFirebase =
         Provider.of<AmoledFirebase>(context, listen: false);
     print(amoledFirebase.itemCount);
     if (amoledFirebase.trending) {
-      // if (amoledFirebase.wallpaper.preview.length > amoledFirebase.itemCount) {
-        
-          await FirebaseDatabase.instance
-              .reference()
-              .child("newwallpaper/hot")
-              .limitToFirst(amoledFirebase.itemCount)
-              .once()
-              .then((value) {
-            return Provider.of<AmoledFirebase>(context, listen: false)
-                .addWallpaper(value.value);
-          }).whenComplete(() => loading = true);
-       
-      // } else {
+      // for (int i = contentcount; i < contentcount + 10; i++) {
+      //   amoledFirebase.addWallpaper(
+      //       amoledFirebase.lazyList.getRange(contentcount, contentcount));
+      // }
+
+      contentcount = contentcount + 10;
+
+      setState(() {});
+
+      // if (amoledFirebase.wallpaper.preview.length > itemcounts) {
+      //   sl.get<GetReddit>().redditData(context, itemcounts += 10);
+      // }
+      //  else {
       //   print("object");
       //   setState(() {
       //     amoledFirebase.addItemNumber(amoledFirebase.itemCount -= 1);
       //   });
       // }
     } else {
-      if (amoledFirebase.latestWallpaper.preview.length >=
-          amoledFirebase.itemCount + 1) {
-        setState(() {
-          amoledFirebase.addItemNumber(amoledFirebase.itemCount += 10);
-        });
-      }
+      // if (amoledFirebase.latestWallpaper.preview.length >=
+      //     amoledFirebase.itemCount + 1) {
+      //   setState(() {
+      //     amoledFirebase.addItemNumber(amoledFirebase.itemCount += 10);
+      //   });
+      // }
     }
   }
 
   Future fetchDataFB() async {
     // bool loading = false;
+    var amoledFirebase = Provider.of<AmoledFirebase>(context, listen: false);
+    // FirebaseDatabase firebaseDatabase;
     await FirebaseDatabase.instance
         .reference()
         .child("newwallpaper/hot")
-        .limitToFirst(10)
         .once()
         .then((value) {
-      return Provider.of<AmoledFirebase>(context, listen: false)
-          .addWallpaper(value.value);
+      return amoledFirebase.addWallpaper(value.value);
     }).whenComplete(() => loading = true);
 
     await FirebaseDatabase.instance
@@ -144,10 +204,10 @@ class _MainScreenPageState extends State<MainScreenPage> {
         .child("newwallpaper/new")
         .once()
         .then((value) {
-      return Provider.of<AmoledFirebase>(context, listen: false)
-          .addLatestWallpaper(value.value);
+      return amoledFirebase.addLatestWallpaper(value.value);
     });
-    Provider.of<AmoledFirebase>(context, listen: false).updatesearchIcon(true);
+    amoledFirebase.updatesearchIcon(true);
+    // amoledFirebase.addItemNumber(amoledFirebase.wallpaper.preview.length - 10);
   }
 
   @override
@@ -194,7 +254,7 @@ class _MainScreenPageState extends State<MainScreenPage> {
                       if (amoledFirebase.trending) {
                         if (amoledFirebase.searchdbtext == "") {
                           return WallpaperList(
-                            itemcount: amoledFirebase.itemCount,
+                           
                           );
                         } else if (amoledFirebase.searchdb.isNotEmpty) {
                           return SearchWallpaper();

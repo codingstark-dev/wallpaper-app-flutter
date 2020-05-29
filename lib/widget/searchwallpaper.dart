@@ -74,9 +74,9 @@ class _SearchWallpaperState extends State<SearchWallpaper> {
                                   Routes.wallpaperDetail,
                                   arguments: WallpaperDetailArguments(
                                       imageextenstion: lol[3],
-                                      imagebytes: filesize(amoledFirebase
-                                          .searchData.imagebytes[index]
-                                          .toString()),
+                                      // imagebytes: filesize(amoledFirebase
+                                      //     .searchData.imagebytes[index]
+                                      //     .toString()),
                                       index: index,
                                       url: amoledFirebase.searchData.url[index],
                                       title: amoledFirebase
@@ -87,10 +87,11 @@ class _SearchWallpaperState extends State<SearchWallpaper> {
                                           .searchData.author[index],
                                       ups: amoledFirebase.wallpaper.ups[index],
                                       date: timeago.format(date).toString(),
-                                      sizeofimage:
-                                          "${amoledFirebase.wallpaper.imagewidth[index]} " +
-                                              "x " +
-                                              "${amoledFirebase.wallpaper.imageheight[index]}"));
+                                      // sizeofimage:
+                                      //     "${amoledFirebase.wallpaper.imagewidth[index]} " +
+                                      //         "x " +
+                                      //         "${amoledFirebase.wallpaper.imageheight[index]}"
+                                              ));
 
                               // Navigator.push(
                               //     context,

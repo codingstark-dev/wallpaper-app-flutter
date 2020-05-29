@@ -88,9 +88,9 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                   Routes.wallpaperDetail,
                                   arguments: WallpaperDetailArguments(
                                       imageextenstion: lol[3],
-                                      imagebytes: filesize(amoledFirebase
-                                          .latestWallpaper.imagebytes[index]
-                                          .toString()),
+                                      // imagebytes: filesize(amoledFirebase
+                                      //     .latestWallpaper.imagebytes[index]
+                                      //     .toString()),
                                       index: index,
                                       url: amoledFirebase
                                           .latestWallpaper.url[index],
@@ -102,9 +102,11 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
                                       ups: amoledFirebase
                                           .latestWallpaper.ups[index],
                                       date: timeago.format(date).toString(),
-                                      sizeofimage: "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
-                                          "x " +
-                                          "${amoledFirebase.latestWallpaper.imageheight[index]}"));
+                                      // sizeofimage: "${amoledFirebase.latestWallpaper.imagewidth[index]} " +
+                                      //     "x " +
+                                      //     "${amoledFirebase.latestWallpaper.imageheight[index]}"
+                                          )
+                                          );
 
                               // Navigator.push(
                               //     context,

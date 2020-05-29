@@ -9,6 +9,7 @@ class AmoledFirebase with ChangeNotifier {
   List firebasedb = [];
   List searchdb = [];
   List latestWallpaperdb = [];
+  List lazyList = [];
   bool searchField = false;
   bool status = false;
   LoadState loadingval;
@@ -19,7 +20,18 @@ class AmoledFirebase with ChangeNotifier {
   bool searchIcon = true;
   bool trending = true;
 
-  addWallpaper(List data) {
+  addLazyList(data) {
+    for (var i = 0; i < data.length; i++) {
+      if (data[i] != null) {
+        lazyList.add(data[i]);
+      }
+    }
+    notifyListeners();
+
+    return lazyList;
+  }
+
+  addWallpaper( data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] != null) {
         firebasedb.add(data[i]);

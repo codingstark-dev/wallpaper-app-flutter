@@ -20,18 +20,16 @@ class WallpaperDetail extends StatefulWidget {
       @required this.title,
       @required this.author,
       @required this.ups,
-      @required this.sizeofimage,
+      // @required this.sizeofimage,
       @required this.date,
-      @required this.imagebytes,
       @required this.imageextenstion})
       : super(key: key);
 
   final String author;
   final String date;
-  final String imagebytes;
   final String imageextenstion;
   final int index;
-  final String sizeofimage;
+  // final String sizeofimage;
   final String title;
   final int ups;
   final String url;
@@ -45,7 +43,9 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
   bool loadingBool = false;
   bool status = false;
   StreamController streamController = StreamController();
-
+  int imagewidth = 0;
+  int imageheight = 0;
+  int imagesize = 0;
   @override
   void dispose() {
     super.dispose();
@@ -204,7 +204,8 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.129 Safari/537.36"
                             },
                             filterQuality: FilterQuality.high,
-                            retries: 30,timeLimit: Duration(seconds: 30),
+                            retries: 30,
+                            timeLimit: Duration(seconds: 30),
                             enableSlideOutPage: true,
                             // enableMemoryCache: true,
                             handleLoadingProgress: true,
@@ -215,66 +216,148 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                           // print(state.extendedImageLoadState);
                           // print(
                           //     state.extendedImageLoadState == LoadState.completed);
-                          if (state.extendedImageLoadState ==
-                              LoadState.failed) {
-                            return Center(
-                              child: Container(
-                                  child: Text(
-                                "Failed To Load Image, Check Your Internet Connection",
-                                style: TextStyle(color: gainsborohs,fontWeight: FontWeight.bold,)
-                              )),
-                            );
-                          } else {
-                            if (state.loadingProgress?.expectedTotalBytes ==
-                                null) return null;
 
-                            return Center(
-                              child: Column(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Container(
-                                          height: 75,
-                                          width: 75,
-                                          child: CircularProgressIndicator(
-                                            valueColor:
-                                                AlwaysStoppedAnimation<Color>(
-                                                    gainsborohs),
-                                            backgroundColor: darkslategrayhs,
-                                            value: state.loadingProgress
-                                                        ?.expectedTotalBytes !=
-                                                    null
-                                                ? state.loadingProgress
-                                                        .cumulativeBytesLoaded /
-                                                    state?.loadingProgress
-                                                        ?.expectedTotalBytes
-                                                : null,
+                          switch (state.extendedImageLoadState) {
+                            case LoadState.failed:
+                              return Center(
+                                child: Container(
+                                    child: Text(
+                                        "Failed To Load Image, Check Your Internet Connection",
+                                        style: TextStyle(
+                                          color: gainsborohs,
+                                          fontWeight: FontWeight.bold,
+                                        ))),
+                              );
+                              break;
+                            case LoadState.loading:
+                              if (state.loadingProgress?.expectedTotalBytes ==
+                                  null) return null;
+
+                              imagesize =
+                                  state.loadingProgress?.expectedTotalBytes ??
+                                      0;
+                              return Center(
+                                child: Column(
+                                  children: <Widget>[
+                                    Expanded(
+                                      child: Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Container(
+                                            height: 75,
+                                            width: 75,
+                                            child: CircularProgressIndicator(
+                                              valueColor:
+                                                  AlwaysStoppedAnimation<Color>(
+                                                      gainsborohs),
+                                              backgroundColor: darkslategrayhs,
+                                              value: state.loadingProgress
+                                                          ?.expectedTotalBytes !=
+                                                      null
+                                                  ? state.loadingProgress
+                                                          .cumulativeBytesLoaded /
+                                                      state?.loadingProgress
+                                                          ?.expectedTotalBytes
+                                                  : null,
+                                            ),
                                           ),
-                                        ),
-                                        Container(
-                                          child: Text(
-                                            filesize((state.loadingProgress
-                                                        .cumulativeBytesLoaded !=
-                                                    null)
-                                                ? state.loadingProgress
-                                                    .cumulativeBytesLoaded
-                                                : 0),
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: gainsborohs,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.bold),
+                                          Container(
+                                            child: Text(
+                                              filesize((state.loadingProgress
+                                                          .cumulativeBytesLoaded !=
+                                                      null)
+                                                  ? state.loadingProgress
+                                                      .cumulativeBytesLoaded
+                                                  : 0),
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: gainsborohs,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
                                           ),
-                                        )
-                                      ],
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            );
+                                  ],
+                                ),
+                              );
+                            default:
                           }
+                          // if (state.extendedImageLoadState ==
+                          //     LoadState.failed) {
+                          //   return Center(
+                          //     child: Container(
+                          //         child: Text(
+                          //             "Failed To Load Image, Check Your Internet Connection",
+                          //             style: TextStyle(
+                          //               color: gainsborohs,
+                          //               fontWeight: FontWeight.bold,
+                          //             ))),
+                          //   );
+                          // } else {
+                          //   if (state.loadingProgress?.expectedTotalBytes ==
+                          //       null) return null;
+
+                          //   // (state.loadingProgress.cumulativeBytesLoaded !=
+                          //   //         null)
+                          //   //     ? state.loadingProgress.cumulativeBytesLoaded
+                          //   //     : 0;
+                          //   // if (state.extendedImageInfo?.image == null)
+                          //   //   return null;
+
+                          imageheight =
+                              state.extendedImageInfo.image?.height ?? 0;
+                          imagewidth =
+                              state.extendedImageInfo.image?.width ?? 0;
+
+                          //   return Center(
+                          //     child: Column(
+                          //       children: <Widget>[
+                          //         Expanded(
+                          //           child: Stack(
+                          //             alignment: Alignment.center,
+                          //             children: [
+                          //               Container(
+                          //                 height: 75,
+                          //                 width: 75,
+                          //                 child: CircularProgressIndicator(
+                          //                   valueColor:
+                          //                       AlwaysStoppedAnimation<Color>(
+                          //                           gainsborohs),
+                          //                   backgroundColor: darkslategrayhs,
+                          //                   value: state.loadingProgress
+                          //                               ?.expectedTotalBytes !=
+                          //                           null
+                          //                       ? state.loadingProgress
+                          //                               .cumulativeBytesLoaded /
+                          //                           state?.loadingProgress
+                          //                               ?.expectedTotalBytes
+                          //                       : null,
+                          //                 ),
+                          //               ),
+                          //               Container(
+                          //                 child: Text(
+                          //                   filesize((state.loadingProgress
+                          //                               .cumulativeBytesLoaded !=
+                          //                           null)
+                          //                       ? state.loadingProgress
+                          //                           .cumulativeBytesLoaded
+                          //                       : 0),
+                          //                   textAlign: TextAlign.center,
+                          //                   style: TextStyle(
+                          //                       color: gainsborohs,
+                          //                       fontSize: 12,
+                          //                       fontWeight: FontWeight.bold),
+                          //                 ),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ],
+                          //     ),
+                          //   );
+                          // }
                         }),
                       ))
 
@@ -603,7 +686,9 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                           color: Colors.white,
                                                         ),
                                                         Text(
-                                                          widget.sizeofimage,
+                                                          "$imagewidth " +
+                                                              "x " +
+                                                              "$imageheight",
                                                           style: TextStyle(
                                                               color:
                                                                   Colors.white,
@@ -737,7 +822,7 @@ class _WallpaperDetailState extends State<WallpaperDetail> {
                                                     width: 3,
                                                   ),
                                                   Text(
-                                                    widget.imagebytes,
+                                                    filesize(imagesize),
                                                     style: TextStyle(
                                                         color: Colors.white,
                                                         fontSize: 14,

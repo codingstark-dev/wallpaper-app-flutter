@@ -75,3 +75,25 @@
 //     // }
 //   }
 // }
+import 'package:draw/draw.dart';
+
+List datas =[];
+  Future<void> redditload() async {
+    // Create the `Reddit` instance and authenticated
+    Reddit reddit = await Reddit.createScriptInstance(
+      clientId: 'W1XGqNQSKF2h4w',
+      clientSecret: '32CM4A9gSaIGVJFTwCHtKjWt7Xg',
+      userAgent:
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36',
+      username: "himanshu338",
+      password: "6b6WNmT*qZQ@qvx", // Fake
+    );
+
+    // Retrieve information for the currently authenticated user
+    SubredditRef  currentUser =  reddit.subreddit("Amoledbackgrounds");
+    // Outputs: My name is DRAWApiOfficial
+   Stream<UserContent> data = currentUser.hot(limit: 5);
+  //  datas.clear();
+  //   data.forEach((element) => element.fetch().then((value) => print(json.encode(value[0]['listing']) )));
+   
+  }

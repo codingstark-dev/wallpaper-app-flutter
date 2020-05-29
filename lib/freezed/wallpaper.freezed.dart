@@ -118,7 +118,11 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
   List<dynamic> get preview {
     if (_didpreview == false) {
       _didpreview = true;
-      _preview = wallpaperData.map((e) => e['preview']).toList();
+      _preview = wallpaperData
+          .map((e) => e['preview']['images'][0]['resolutions'][2]['url']
+              .toString()
+              .replaceAll("amp;", ""))
+          .toList();
     }
     return _preview;
   }
@@ -142,7 +146,7 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
   List<dynamic> get image {
     if (_didimage == false) {
       _didimage = true;
-      _image = wallpaperData.map((e) => e['image']).toList();
+      _image = wallpaperData.map((e) => e['url']).toList();
     }
     return _image;
   }
@@ -178,50 +182,14 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
   List<dynamic> get url {
     if (_didurl == false) {
       _didurl = true;
-      _url = wallpaperData.map((e) => e['image']).toList();
+      _url = wallpaperData.map((e) => e['url']).toList();
     }
     return _url;
   }
 
-  bool _didimagebytes = false;
-  List<dynamic> _imagebytes;
-
-  @override
-  List<dynamic> get imagebytes {
-    if (_didimagebytes == false) {
-      _didimagebytes = true;
-      _imagebytes = wallpaperData.map((e) => e['imagebytes']).toList();
-    }
-    return _imagebytes;
-  }
-
-  bool _didimagewidth = false;
-  List<dynamic> _imagewidth;
-
-  @override
-  List<dynamic> get imagewidth {
-    if (_didimagewidth == false) {
-      _didimagewidth = true;
-      _imagewidth = wallpaperData.map((e) => e['imagesize'][0]).toList();
-    }
-    return _imagewidth;
-  }
-
-  bool _didimageheight = false;
-  List<dynamic> _imageheight;
-
-  @override
-  List<dynamic> get imageheight {
-    if (_didimageheight == false) {
-      _didimageheight = true;
-      _imageheight = wallpaperData.map((e) => e['imagesize'][1]).toList();
-    }
-    return _imageheight;
-  }
-
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url, imagebytes: $imagebytes, imagewidth: $imagewidth, imageheight: $imageheight)';
+    return 'Wallpaper(wallpaperData: $wallpaperData, title: $title, author: $author, preview: $preview, permalink: $permalink, image: $image, ups: $ups, createdUtc: $createdUtc, url: $url)';
   }
 
   @override
@@ -237,10 +205,7 @@ class _$_Wallpaper with DiagnosticableTreeMixin implements _Wallpaper {
       ..add(DiagnosticsProperty('image', image))
       ..add(DiagnosticsProperty('ups', ups))
       ..add(DiagnosticsProperty('createdUtc', createdUtc))
-      ..add(DiagnosticsProperty('url', url))
-      ..add(DiagnosticsProperty('imagebytes', imagebytes))
-      ..add(DiagnosticsProperty('imagewidth', imagewidth))
-      ..add(DiagnosticsProperty('imageheight', imageheight));
+      ..add(DiagnosticsProperty('url', url));
   }
 
   @override
