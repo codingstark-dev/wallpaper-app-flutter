@@ -43,7 +43,7 @@ class _LatestWallpapersState extends State<LatestWallpapers> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: amoledFirebase.latestWallpaper.preview.length
+        itemCount: amoledFirebase.latestWallpaper.latestwallpaperData?.length ?? 0
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,

@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'package:auto_route/auto_route.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -136,14 +134,14 @@ class _MainScreenPageState extends State<MainScreenPage> {
     Stream<Reddit.UserContent> newest = currentUser.newest(
       limit: i,
     );
-    week.forEach((element) async {
+    week.listen((element) async {
       var data = await element.fetch();
 
       Reddit.Submission submission = data[0]['listing'][0];
       if (submission.url.path.trim().contains("png") ||
           submission.url.path.trim().contains("jpeg") ||
           submission.url.path.trim().contains("jpg") ||
-          submission.over18 != true) {
+          submission.over18 != true && submission.preview.isNotEmpty) {
         // List<SubmissionPreview> s = submission.preview;
         //  print(s[3]);
         weekdata.clear();
@@ -156,83 +154,107 @@ class _MainScreenPageState extends State<MainScreenPage> {
         loading = true;
       }
     });
-    newest.forEach((element) async {
-      var data = await element.fetch();
+
+    newest.listen((event) async {
+      var data = await event.fetch();
 
       Reddit.Submission submission = data[0]['listing'][0];
       if (submission.url.path.trim().contains("png") ||
           submission.url.path.trim().contains("jpeg") ||
           submission.url.path.trim().contains("jpg") &&
-              submission.over18 != true) {
-        // List<SubmissionPreview> s = submission.preview;
-
+              submission.over18 != true &&
+              submission.preview.isNotEmpty) {
+        // print(submission.data['preview']);
         newestdata.clear();
         newestdata.add(submission.data);
-        // print(newestdata.toList());
+
         for (var i = 0; i < newestdata.length; i++) {
           amoledFirebase.addLatestWallpaper(newestdata);
         }
         setState(() {});
         loading = true;
+        //
       }
     });
+    // newest.forEach((element) async {
+    //   var data = await element.fetch();
+
+    //   Reddit.Submission submission = data[0]['listing'][0];
+    //   if (submission.url.path.trim().contains("png") ||
+    //       submission.url.path.trim().contains("jpeg") ||
+    //       submission.url.path.trim().contains("jpg") &&
+    //           submission.over18 != true &&
+    //           submission.preview.isNotEmpty &&
+    //           submission.preview == []) {
+    //     // List<SubmissionPreview> s = submission.preview;
+
+    //     newestdata.clear();
+    //     newestdata.add(submission.data);
+
+    //     // for (var i = 0; i < newestdata.length; i++) {
+    //     amoledFirebase.addLatestWallpaper(newestdata);
+    //     // }
+    //     setState(() {});
+    //     loading = true;
+    //   }
+    // });
   }
 
-  getmoreData() async {
-    AmoledFirebase amoledFirebase =
-        Provider.of<AmoledFirebase>(context, listen: false);
-    print(amoledFirebase.itemCount);
-    if (amoledFirebase.trending) {
-      // for (int i = contentcount; i < contentcount + 10; i++) {
-      //   amoledFirebase.addWallpaper(
-      //       amoledFirebase.lazyList.getRange(contentcount, contentcount));
-      // }
+  // getmoreData() async {
+  //   AmoledFirebase amoledFirebase =
+  //       Provider.of<AmoledFirebase>(context, listen: false);
+  //   print(amoledFirebase.itemCount);
+  //   if (amoledFirebase.trending) {
+  //     // for (int i = contentcount; i < contentcount + 10; i++) {
+  //     //   amoledFirebase.addWallpaper(
+  //     //       amoledFirebase.lazyList.getRange(contentcount, contentcount));
+  //     // }
 
-      contentcount = contentcount + 10;
+  //     contentcount = contentcount + 10;
 
-      setState(() {});
+  //     setState(() {});
 
-      // if (amoledFirebase.wallpaper.preview.length > itemcounts) {
-      //   sl.get<GetReddit>().redditData(context, itemcounts += 10);
-      // }
-      //  else {
-      //   print("object");
-      //   setState(() {
-      //     amoledFirebase.addItemNumber(amoledFirebase.itemCount -= 1);
-      //   });
-      // }
-    } else {
-      // if (amoledFirebase.latestWallpaper.preview.length >=
-      //     amoledFirebase.itemCount + 1) {
-      //   setState(() {
-      //     amoledFirebase.addItemNumber(amoledFirebase.itemCount += 10);
-      //   });
-      // }
-    }
-  }
+  //     // if (amoledFirebase.wallpaper.preview.length > itemcounts) {
+  //     //   sl.get<GetReddit>().redditData(context, itemcounts += 10);
+  //     // }
+  //     //  else {
+  //     //   print("object");
+  //     //   setState(() {
+  //     //     amoledFirebase.addItemNumber(amoledFirebase.itemCount -= 1);
+  //     //   });
+  //     // }
+  //   } else {
+  //     // if (amoledFirebase.latestWallpaper.preview.length >=
+  //     //     amoledFirebase.itemCount + 1) {
+  //     //   setState(() {
+  //     //     amoledFirebase.addItemNumber(amoledFirebase.itemCount += 10);
+  //     //   });
+  //     // }
+  //   }
+  // }
 
-  Future fetchDataFB() async {
-    // bool loading = false;
-    var amoledFirebase = Provider.of<AmoledFirebase>(context, listen: false);
-    // FirebaseDatabase firebaseDatabase;
-    await FirebaseDatabase.instance
-        .reference()
-        .child("newwallpaper/hot")
-        .once()
-        .then((value) {
-      return amoledFirebase.addWallpaper(value.value);
-    }).whenComplete(() => loading = true);
+  // Future fetchDataFB() async {
+  //   // bool loading = false;
+  //   var amoledFirebase = Provider.of<AmoledFirebase>(context, listen: false);
+  //   // FirebaseDatabase firebaseDatabase;
+  //   await FirebaseDatabase.instance
+  //       .reference()
+  //       .child("newwallpaper/hot")
+  //       .once()
+  //       .then((value) {
+  //     return amoledFirebase.addWallpaper(value.value);
+  //   }).whenComplete(() => loading = true);
 
-    await FirebaseDatabase.instance
-        .reference()
-        .child("newwallpaper/new")
-        .once()
-        .then((value) {
-      return amoledFirebase.addLatestWallpaper(value.value);
-    });
-    amoledFirebase.updatesearchIcon(true);
-    // amoledFirebase.addItemNumber(amoledFirebase.wallpaper.preview.length - 10);
-  }
+  //   await FirebaseDatabase.instance
+  //       .reference()
+  //       .child("newwallpaper/new")
+  //       .once()
+  //       .then((value) {
+  //     return amoledFirebase.addLatestWallpaper(value.value);
+  //   });
+  //   amoledFirebase.updatesearchIcon(true);
+  //   // amoledFirebase.addItemNumber(amoledFirebase.wallpaper.preview.length - 10);
+  // }
 
   @override
   Widget build(BuildContext context) {

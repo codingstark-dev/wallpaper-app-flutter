@@ -31,10 +31,12 @@ class AmoledFirebase with ChangeNotifier {
     return lazyList;
   }
 
-  addWallpaper( data) {
+  addWallpaper(data) {
     for (var i = 0; i < data.length; i++) {
-      if (data[i] != null) {
-        firebasedb.add(data[i]);
+      if (data[i]['preview'] != null ||  data[i]['preview'] == []) {
+        if (data[i] != null) {
+          firebasedb.add(data[i]);
+        }
       }
     }
     wallpaper = Wallpaper(firebasedb);
@@ -49,8 +51,10 @@ class AmoledFirebase with ChangeNotifier {
 
   addLatestWallpaper(data) {
     for (var i = 0; i < data.length; i++) {
-      if (data[i] != null) {
-        latestWallpaperdb.add(data[i]);
+      if (data[i]['preview'] != null ||  data[i]['preview'] == []) {
+        if (data[i] != null) {
+          latestWallpaperdb.add(data[i]);
+        }
       }
     }
     latestWallpaper = LatestWallpaper(latestWallpaperdb);
@@ -58,7 +62,7 @@ class AmoledFirebase with ChangeNotifier {
     return latestWallpaper;
   }
 
-  addsearch( data) {
+  addsearch(data) {
     for (var i = 0; i < data.length; i++) {
       if (data[i] != null) {
         searchdb.add(data[i]);

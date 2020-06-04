@@ -43,7 +43,7 @@ class _WallpaperListState extends State<WallpaperList> {
             mainAxisSpacing: 1),
         padding: EdgeInsets.all(10),
         scrollDirection: Axis.vertical,
-        itemCount: amoledFirebase.wallpaper.preview.length
+        itemCount: amoledFirebase.wallpaper?.preview?.length ?? 0
         // widget.dataSnapshot.value.length
         ,
         // itemCount: data.wallpaper.url.length,
